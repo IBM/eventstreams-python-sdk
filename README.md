@@ -119,8 +119,6 @@ operations:
   
 The Admin REST API is also [documented using swagger](./admin-rest-api.yaml).
 
-Note: This Admin REST API works with both Enterprise plan and Standard plan.
-
 ## Access control
 ---
 
@@ -236,6 +234,7 @@ Use one of the following methods to authenticate:
 
 Here's an example of how to create the authenticator using either an API key or a BEARER_TOKEN
 
+```
 	# Create Authenticator
 	if not KAFKA_ADMIN_URL:
 	    print("Please set env KAFKA_ADMIN_URL")
@@ -262,6 +261,7 @@ Here's an example of how to create the authenticator using either an API key or 
 	# End Authenticator
 
 
+```
 
 
 ### Creating a client for the Admin REST API.
@@ -279,6 +279,7 @@ Create a new service object.
 ---
 To create a Kafka topic the admin REST SDK issues a POST request to the /admin/topics path. 
 The body of the request contains a JSON document, for example:
+```
 {
     "name": "topicname",
     "partitions": 1,
@@ -287,8 +288,9 @@ The body of the request contains a JSON document, for example:
         "cleanupPolicy": "delete"
     }
 }
+```
 
-The only required field is name is `Partitions` which is defaults to 1 if not set.
+The only required field is name. The partitions fields defaults to 1 if not set.
 
 Expected HTTP status codes:
 
@@ -304,6 +306,7 @@ If the request to create a Kafka topic succeeds then HTTP status code 202 (Accep
 
 #### Example
 
+```
 	def create_topic(service,topic_name):
 	    # Set up parameter values
 	    partition_count = 1
@@ -323,7 +326,7 @@ If the request to create a Kafka topic succeeds then HTTP status code 202 (Accep
 	    # func.End
 
 
-
+```
 
 
 
@@ -341,9 +344,9 @@ Expected return codes:
   
 A 202 (Accepted) status code is returned if the REST API accepts the delete
 request or status code 422 (Un-processable Entity) if the delete request is
-rejected. If a delete request is rejected then the body of the HTTP response
-will contain a [JSON object](#information-returned-when-a-request-fails) which
-provides additional information about why the request was rejected.
+rejected. If a delete request is rejected then the body of the HTTP response 
+will contain a JSON object which provides additional information about why 
+the request was rejected.
 
 Kafka deletes topics asynchronously. Deleted topics may still appear in the
 response to a [list topics request](#listing-kafka-topics) for a short period
@@ -351,6 +354,7 @@ of time after the completion of a REST request to delete the topic.
 
 #### Example
 
+```
 	def delete_topic(service,topic_name):
 	    # Lets try to delete it.
 	    try:
@@ -364,6 +368,7 @@ of time after the completion of a REST request to delete the topic.
 	    # func.End
 
 
+```
 
 ### Listing Kafka topics
 ---
@@ -401,6 +406,7 @@ following properties:
 
 #### Example
 
+```
 	def list_topics(service):
 	    # Set up parameter values
 	    topic_filter = ''
@@ -421,6 +427,7 @@ following properties:
 	    # func.end
 
 
+```
 
 ### Getting a Kafka topic
 ---
@@ -428,7 +435,7 @@ To get a Kafka topic detail information, issue a GET request to the `/admin/topi
 path (where `TOPICNAME` is the name of the Kafka topic that you want to get).  
 
 Expected status codes
-  - 200: Retrieve topic details successfully in following format:
+- 200: Retrieve topic details successfully in following format:
 ```json
 {
   "name": "MYTOPIC",
@@ -457,8 +464,12 @@ Expected status codes
   ]
 }
 ```
+- 403: Not authorized.
+- 404: Topic does not exist.
 
 #### Example
+
+```
 	def topic_details(service,topic_name):
 	    # Invoke get method.
 	    try:
@@ -473,11 +484,13 @@ Expected status codes
 	    # func.End  
 
 
+```
 
 ### Updating Kafka topic's configuration
 ---
-To increase a topic's partition number or to update a topic's configuration, the admin REST SDK issues an
-`PATCH` request to `/admin/topics/{topic}` with the following body:
+To increase a Kafka topic's partition number or to update a Kafka topic's configuration, issue a
+`PATCH` request to `/admin/topics/TOPICNAME` with the following body:
+(where TOPICNAME is the name of the Kafka topic that you want to update).
 ```json
 {
   "new_total_partition_count": 4,
@@ -500,6 +513,7 @@ Expected status codes
 
 #### Example
 
+```
 	def update_topic(service,topic_name):
 	    # Set up parameter values.
 	    new_total_partition_count = 6
@@ -519,6 +533,7 @@ Expected status codes
 	    # func.End
 
 
+```
 
 ### List current mirroring topic selection
 
@@ -543,6 +558,7 @@ Expected status codes
 
 #### Example
 
+```
 	def get_mirroring_topic_selection(service):
 	    # Invoke get selection method.
 	    try:
@@ -555,6 +571,7 @@ Expected status codes
 	    # func.End
 
 
+```
 
 ### Replace selection of topics which are mirrored
 
@@ -583,6 +600,7 @@ Expected status codes
 
 #### Example
 
+```
 	def replace_mirroring_topic_selection(service,topic_name):
 	     # Set up parameter values
 	    includes = [topic_name]    
@@ -598,6 +616,7 @@ Expected status codes
 	    # func.End
 
 
+```
 
 ### List active mirroring topics
 ---
@@ -622,6 +641,7 @@ Expected status codes
 
 #### Example
 
+```
 	def get_list_mirroring_active_topics(service):
 	    # Invoke active method.
 	    try:
@@ -635,3 +655,4 @@ Expected status codes
 	    # func.End
 
 
+```
