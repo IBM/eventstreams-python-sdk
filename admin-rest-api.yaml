@@ -1,0 +1,966 @@
+#
+# Copyright 2018, 2019 IBM
+#
+# Eclipse Public License - v 1.0
+#
+#THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC
+#LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM
+#CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.
+
+swagger: '2.0'
+
+info:
+  version: 1.1.0
+  title: IBM Event Streams Admin REST API
+  description: The administration REST API for IBM Event Streams on Cloud.
+  x-alternate-name: adminrest
+
+securityDefinitions:
+  APIKeyAuth:
+    type: apiKey
+    in: header
+    name: X-Auth-Token
+    description: >
+      A valid API key is required to access this API.  API keys can be allocated
+      via the IBM Cloud interface, and are associated with an instance of the
+      Event Streams service. API key values must be supplied on every REST request
+      using the `X-Auth-Token` HTTP header. Failure to specify a valid API key
+      will result in the REST request failing with a 401 (Unauthorized) status
+      code. `X-Auth-Token` header is deprecated, `Authorization` header is recommanded.
+  TokenAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    description: >
+      A valid token or API key is required to access this API. API keys can be allocated
+      via the IBM Cloud interface, and are associated with an instance of the
+      Event Streams service. Token is obtained upon login to IBM Cloud and is associated with 
+      the identity of the user. Either token or API key must be supplied on every REST request
+      using the `Authorization` `Bearer ${TokenOrAPIKey}` HTTP header. Failure to do so will 
+      result in the REST request failing with a 401 (Unauthorized) status code.
+  BasicAuth:
+    type: basic
+    description: >
+      To use basic authentication, the HTTP header name is `Authorization`, value is 
+      `Basic <base64 encoded value of username:password>.
+      For both enterprise and standard plan, user name is `token`, password is API key.
+
+schemes: 
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+
+#====================================================================================#
+# APIs for managing topics
+#====================================================================================#
+  /admin/topics:
+    #==============================
+    # POST /topics
+    #==============================
+    post:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth:  []
+      operationId: CreateTopic
+      summary: Create a new topic.
+      description: Create a new topic.
+      x-sdk-tags: 
+        - Topic Operations
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/topic_create'
+      responses:
+        202:
+          description: >
+            Topic creation request accepted. Topic creation occurs
+            asynchronously, and therefore invoking the list topics REST endpoint
+            may not immediately show newly created topics.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated. 
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+            Strict-Transport-Security:
+              type: string
+              default: max-age=31536000; includeSubDomains
+              description: > 
+                Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+            Cache-Control:
+              type: string 
+              default: no-cache, no-store
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                And the cache should not store anything about the client request or server response.
+            Pragma: 
+              type: string
+              default: no-cache
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+          schema:
+            $ref: '#/definitions/empty'
+        400:
+          $ref: '#/responses/bad_request'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:     
+          $ref: '#/responses/forbidden'
+        422:
+          $ref: '#/responses/unprocessable_entity'
+        503:
+          $ref: '#/responses/service_unavailable'
+
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example create topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_CREATE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example create topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_CREATE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example create topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_CREATE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example create topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_CREATE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example create topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_CREATE_TOPIC_EXAMPLE__" 
+
+    #==============================
+    # GET /topics
+    #==============================  
+    get:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth:  []
+      operationId: ListTopics
+      summary: Get a list of topics.
+      description: >
+        Returns a list containing information about all of the Kafka topics that
+        are defined for an instance of the Event Streams service. If there are
+        currently no topics defined then an empty list is returned.
+      x-sdk-tags: 
+        - Topic Operations
+      parameters:
+        - $ref: '#/parameters/topic_filter'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: >
+            Success.  A list of topic information objects is returned in the
+            response body.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated. 
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+            Strict-Transport-Security:
+              type: string
+              default: max-age=31536000; includeSubDomains
+              description: > 
+                Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+            Cache-Control:
+              type: string 
+              default: no-cache, no-store
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                And the cache should not store anything about the client request or server response.
+            Pragma: 
+              type: string
+              default: no-cache
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+            X-Total-Count:
+              type: integer
+              description: The total number of topics available. 
+            Link:
+              type: string
+              description: >
+                The client can scroll through pages using the links generated in the Link header.
+                There are 4 links encoded in the header which represent the first, last, next and
+                previous operations. An example header is Link:
+                <http://kafka.admin.host/admin/topics?page=2&per_page=20>; rel="next",
+                <http://kafka.admin.host/admin/topics?page=1&per_page=20>; rel="first",
+                <http://kafka.admin.host/admin/topics?page=5&per_page=20>; rel="last"
+          schema:
+            $ref: '#/definitions/topic_list'  
+        401:
+          $ref: '#/responses/unauthorized'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example lists topics using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_LIST_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example lists topics using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_LIST_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example lists topics using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_LIST_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example lists topics using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_LIST_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example lists topics using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_LIST_TOPIC_EXAMPLE__" 
+
+
+  /admin/topics/{topic_name}:
+    #==================================
+    # GET /admin/topics/{topic_name}
+    #==================================
+    get:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: GetTopic
+      summary: Get detailed information on a topic.
+      description: Get detailed information on a topic.
+      x-sdk-tags: 
+        - Topic Operations
+      parameters:
+        - $ref: '#/parameters/topic_name'
+      responses:
+        200:
+          description: Returns a detailed description of a single topic.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated. 
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'. 
+            Strict-Transport-Security:
+              type: string
+              default: max-age=31536000; includeSubDomains
+              description: > 
+                Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+            Cache-Control:
+              type: string 
+              default: no-cache, no-store
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                And the cache should not store anything about the client request or server response.
+            Pragma: 
+              type: string
+              default: no-cache
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+          schema:
+            $ref: '#/definitions/topic_detail'
+        401:
+          $ref: '#/responses/unauthorized'
+        404:
+          $ref: '#/responses/not_found'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get topic details using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_TOPIC_DETAILS_EXAMPLE__"
+          go:
+            - name: "Example get topic details using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_TOPIC_DETAILS_EXAMPLE__" 
+          java:
+            - name: "Example get topic details using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_TOPIC_DETAILS_EXAMPLE__" 
+          python:
+            - name: "Example get topic details using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_TOPIC_DETAILS_EXAMPLE__" 
+          node:
+            - name: "Example get topic details using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_TOPIC_DETAILS_EXAMPLE__" 
+
+    
+    #==================================
+    # DELETE /admin/topics/{topic_name}
+    #==================================
+    delete:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: DeleteTopic
+      summary: Delete a topic.
+      description: Delete a topic.
+      x-sdk-tags: 
+        - Topic Operations
+      parameters:
+        - $ref: '#/parameters/topic_name'
+      responses:
+        202:
+          description: >
+            The Topic delete request accepted. The Kafka topic deletion process
+            occurs asynchronously. Duplicate deletion requests for a topic which
+            is in the process of being deleted will return this status code.
+            Requests to delete a non-existent topic will also return this status
+            code.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated. 
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+            Strict-Transport-Security:
+              type: string
+              default: max-age=31536000; includeSubDomains
+              description: > 
+                Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+            Cache-Control:
+              type: string 
+              default: no-cache, no-store
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                And the cache should not store anything about the client request or server response.
+            Pragma: 
+              type: string
+              default: no-cache
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+          schema:
+            $ref: '#/definitions/empty'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/not_found'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example delete topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_DELETE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example delete topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_DELETE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example delete topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_DELETE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example delete topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_DELETE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example delete topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_DELETE_TOPIC_EXAMPLE__" 
+
+  
+    #=================================
+    # PATCH /admin/topics/{topic_name}
+    #=================================
+    patch:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: UpdateTopic
+      summary: >
+        Increase the number of partitions and/or update one or more topic configuration parameters.
+      description: >
+        Increase the number of partitions and/or update one or more topic configuration parameters.
+      x-sdk-tags: 
+        - Topic Operations
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/topic_name'
+        - $ref: '#/parameters/topic_update'
+      responses:
+        202:
+          description: Request was accepted.
+          headers: 
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated. 
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+            Strict-Transport-Security:
+              type: string
+              default: max-age=31536000; includeSubDomains
+              description: > 
+                Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+            Cache-Control:
+              type: string 
+              default: no-cache, no-store
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                And the cache should not store anything about the client request or server response.
+            Pragma: 
+              type: string
+              default: no-cache
+              description: >
+                Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+                Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+          schema:
+            $ref: '#/definitions/empty'
+        400:
+          $ref: '#/responses/bad_request'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/not_found'
+        422:
+          $ref: '#/responses/unprocessable_entity'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example update topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_UPDATE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example update topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_UPDATE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example update topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_UPDATE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example update topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_UPDATE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example update topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_UPDATE_TOPIC_EXAMPLE__" 
+
+
+  '/admin/mirroring/topic-selection':
+    #=====================================
+    # GET /admin/mirroring/topic-selection
+    #=====================================
+    get:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: GetMirroringTopicSelection
+      summary: Get current topic selection for mirroring.
+      description: Get current topic selection for mirroring.
+      x-sdk-tags: 
+        - Mirroring Operations
+      parameters: []
+      responses:
+        200:
+          description: Returns topic selections as patterns.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated.
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+          schema:
+            $ref: '#/definitions/mirroring_topic_selection'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:
+          $ref: '#/responses/forbidden'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get mirroring topic selection using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
+          go:
+            - name: "Example get mirroring topic selection using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          java:
+            - name: "Example get mirroring topic selection using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          python:
+            - name: "Example get mirroring topic selection using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          node:
+            - name: "Example get mirroring topic selection using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+
+
+    #=====================================
+    # POST /admin/mirroring/topic-selection
+    #=====================================
+    post:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: ReplaceMirroringTopicSelection
+      summary: Replace topic selection for mirroring.
+      description: Replace topic selection for mirroring. This operation replaces the complete set of mirroring topic selections.
+      x-sdk-tags: 
+        - Mirroring Operations
+      parameters:
+        - $ref: '#/parameters/mirroring_topic_selection_replacement'
+      responses:
+        200:
+          description: Returns new topic selections as patterns.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated.
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+          schema:
+            $ref: '#/definitions/mirroring_topic_selection'
+        400:
+          $ref: '#/responses/bad_request'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:
+          $ref: '#/responses/forbidden'
+        415:
+          $ref: '#/responses/unsupported_media_type'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example replace mirroring topic selection using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
+          go:
+            - name: "Example replace mirroring topic selection using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          java:
+            - name: "Example replace mirroring topic selection using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          python:
+            - name: "Example replace mirroring topic selection using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          node:
+            - name: "Example replace mirroring topic selection using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+
+
+  '/admin/mirroring/active-topics':
+    #=====================================
+    # GET /admin/mirroring/active-topics
+    #=====================================
+    get:
+      security:
+        - APIKeyAuth: []
+        - TokenAuth: []
+        - BasicAuth: []
+      operationId: GetMirroringActiveTopics
+      summary: Get topics that are being actively mirrored.
+      description: Get topics that are being actively mirrored.
+      x-sdk-tags: 
+        - Mirroring Operations
+      parameters: []
+      responses:
+        200:
+          description: Return topics that are being actively mirrored.
+          headers:
+            X-Global-Transaction-Id:
+              type: string
+              description: >
+                The transaction ID of the request for debugging purpose.
+                If the header is set on the request, it will be honored. If not, it will be generated.
+                In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+          schema:
+            $ref: '#/definitions/mirroring_active_topics'
+        401:
+          $ref: '#/responses/unauthorized'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/not_found'
+        503:
+          $ref: '#/responses/service_unavailable'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get mirroring active topics using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
+          go:
+            - name: "Example get mirroring active topics using Go."
+              example: 
+                - type: "code"
+                  source: "__GO_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+          java:
+            - name: "Example get mirroring active topics using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+          python:
+            - name: "Example get mirroring active topics using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
+          node:
+            - name: "Example get mirroring active topics using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+
+
+definitions:
+  empty:
+    type: object
+    description: Expected empty response could be {}.
+  
+  error:
+    type: object
+    properties:
+      error_code:
+        type: integer
+        description: The 3-digits http status code plus 2-digits kafka error code.
+      message:
+        type: string
+        description: The error message.
+      incident_id:
+        type: string
+        description: The incident ID of the error.
+
+  topic_create_request:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of topic to be created. 
+      partitions:
+        type: integer
+        format: int64
+        description: The number of partitions.
+      partition_count:
+        type: integer
+        format: int64
+        description: The number of partitions, this field takes precedence over 'partitions'. Default value is 1 if not specified.
+        default: 1
+        minimum: 1
+        maximum: 1000
+      configs:
+        type: array
+        description: The config properties to be set for the new topic.
+        items:
+          $ref: '#/definitions/config_create'
+  
+  config_create:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the config property.   
+      value:
+        type: string
+        description: The value for a config property.    
+
+  config_update:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the config property.
+        value:
+          type: string
+          description: The value for a config property.   
+        reset_to_default:
+          type: boolean
+          description: When true, the value of the config property is reset to its default value.      
+
+  topic_update_request:
+    type: object
+    properties:
+      new_total_partition_count:
+        type: integer
+        format: int32
+        description: The new partition number to be increased.
+      configs:
+        type: array
+        description: >
+          The config properties to be updated for the topic.
+          Valid config keys are 'cleanup.policy', 'retention.ms', 'retention.bytes', 'segment.bytes', 'segment.ms', 'segment.index.bytes'.
+        items:
+          $ref: '#/definitions/config_update'
+  
+  topic_list:
+    description:  A list of 'topic_detail' is returned.
+    type: array
+    items:
+      $ref: '#/definitions/topic_detail'
+  
+  topic_detail:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the topic.
+      partitions:
+        type: integer
+        description: The number of partitions. 
+      replicationFactor:
+        type: integer
+        description: The number of replication factor. 
+      retentionMs:
+        type: integer
+        description: The value of config property 'retention.ms'.
+      cleanupPolicy:
+        type: string
+        description: The value of config property 'cleanup.policy'.
+      configs:
+        $ref: '#/definitions/topic_configs'
+      replicaAssignments:
+        type: array
+        description: The replia assignment of the topic.
+        items:
+          $ref: '#/definitions/replica_assignment'
+    
+  topic_configs:
+    type: object
+    properties:
+      cleanup.policy:
+        type: string
+        description: The value of config property 'cleanup.policy'.
+      min.insync.replicas:
+        type: string
+        description: The value of config property 'min.insync.replicas'
+      retention.bytes:
+        type: string
+        description: The value of config property 'retention.bytes'.
+      retention.ms:
+        type: string
+        description: The value of config property 'retention.ms'
+      segment.bytes:
+        type: string
+        description: The value of config property 'segment.bytes'.
+      segment.index.bytes:
+        type: string
+        description: The value of config property 'segment.index.bytes'.
+      segment.ms:
+        type: string
+        description: The value of config property 'segment.ms'.
+
+  replica_assignment:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The ID of the partition.
+      brokers:
+        type: object
+        properties:
+          replicas:
+            type: array
+            items:
+              type: integer
+              description: The IDs of replicas of the partition.
+
+  topic_selection_pattern:
+    type: string
+    description: Mirroring topic selection pattern.
+
+  mirroring_topic_selection:
+    type: object
+    description: Mirroring topic selection payload.
+    properties:
+      includes:
+        type: array
+        items:
+          $ref: '#/definitions/topic_selection_pattern'
+
+  active_topic:
+    type: string
+    description: Active mirroring topic.
+
+  mirroring_active_topics:
+    type: object
+    description: Topics that are being actively mirrored.
+    properties:
+      active_topics:
+        type: array
+        items:
+          $ref: '#/definitions/active_topic'
+
+# Descriptions of common parameters
+parameters:
+  topic_filter:
+    name: topic_filter
+    in: query
+    required: false
+    type: string
+    description: >
+        A filter to be applied to the topic names. A simple filter can be specified as
+        a string with asterisk (`*`) wildcards representing 0 or more characters, e.g.
+        `topic-name*` will filter all topic names that begin with the string `topic-name`
+        followed by any character sequence. A more complex filter pattern can be used
+        by surrounding a regular expression in forward slash (`/`) delimiters, e.g.
+        `/topic-name.* /`.
+    
+  per_page:  
+    name: per_page
+    in: query
+    required: false
+    type: integer
+    description: The number of topic names to be returns.
+    
+  page:  
+    name: page
+    in: query
+    required: false
+    type: integer
+    description: >
+      The page number to be returned. The number 1 represents the first page. The default value is 1.
+
+  topic_create:
+    name: topic_create
+    in: body
+    required: true       
+    description: The new topic to be created.
+    schema:
+      $ref: '#/definitions/topic_create_request'
+
+  topic_name:
+    name: topic_name
+    in: path
+    type: string
+    required: true
+    description: The topic name for the topic to be listed.
+
+  topic_update:
+    name: topic_update
+    in: body
+    required: true
+    description: The new partition number or the configurations to be updated for the topic.
+    schema:
+      $ref: '#/definitions/topic_update_request'
+
+  mirroring_topic_selection_replacement:
+    name: mirroring_topic_selection_replacement
+    in: body
+    required: true
+    description: Topic selection patterns for mirroring.
+    schema:
+      $ref: '#/definitions/mirroring_topic_selection'
+  
+# Descriptions of common responses
+responses:
+  service_unavailable:
+    description: Service was unavailable.
+    schema: 
+      $ref: '#/definitions/error'
+
+  not_found:
+    description: The requested resource was not found.
+    schema: 
+      $ref: '#/definitions/error'
+  
+  unauthorized:
+    description: Authentication information was missing or bad.
+    schema:
+      $ref: '#/definitions/error'
+  
+  forbidden:
+    description: Not authorized to perform the operation.
+    schema:
+      $ref: '#/definitions/error'
+  
+  bad_request:
+    description: The request body was invalid JSON.
+    schema:
+      $ref: '#/definitions/error'
+  
+  unprocessable_entity:
+    description: The server was not able to process the request body.
+    schema:
+      $ref: '#/definitions/error'
+
+  unsupported_media_type:
+    description: Unsupported Content-Type provided.
+    schema:
+      $ref: '#/definitions/error'
