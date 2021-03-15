@@ -129,7 +129,7 @@ paths:
             - name: "Example create topic using Go."
               example: 
                 - type: "code"
-                  source: "__GO_CREATE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_CREATE_TOPIC_EXAMPLE__" 
           java:
             - name: "Example create topic using Java."
               example: 
@@ -224,7 +224,7 @@ paths:
             - name: "Example lists topics using Go."
               example: 
                 - type: "code"
-                  source: "__GO_LIST_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_LIST_TOPIC_EXAMPLE__" 
           java:
             - name: "Example lists topics using Java."
               example: 
@@ -304,7 +304,7 @@ paths:
             - name: "Example get topic details using Go."
               example: 
                 - type: "code"
-                  source: "__GO_TOPIC_DETAILS_EXAMPLE__" 
+                  source: "__GOLANG_TOPIC_DETAILS_EXAMPLE__" 
           java:
             - name: "Example get topic details using Java."
               example: 
@@ -390,7 +390,7 @@ paths:
             - name: "Example delete topic using Go."
               example: 
                 - type: "code"
-                  source: "__GO_DELETE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_DELETE_TOPIC_EXAMPLE__" 
           java:
             - name: "Example delete topic using Java."
               example: 
@@ -480,7 +480,7 @@ paths:
             - name: "Example update topic using Go."
               example: 
                 - type: "code"
-                  source: "__GO_UPDATE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_UPDATE_TOPIC_EXAMPLE__" 
           java:
             - name: "Example update topic using Java."
               example: 
@@ -542,7 +542,7 @@ paths:
             - name: "Example get mirroring topic selection using Go."
               example: 
                 - type: "code"
-                  source: "__GO_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__GOLANG_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
           java:
             - name: "Example get mirroring topic selection using Java."
               example: 
@@ -608,7 +608,7 @@ paths:
             - name: "Example replace mirroring topic selection using Go."
               example: 
                 - type: "code"
-                  source: "__GO_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__GOLANG_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
           java:
             - name: "Example replace mirroring topic selection using Java."
               example: 
@@ -672,7 +672,7 @@ paths:
             - name: "Example get mirroring active topics using Go."
               example: 
                 - type: "code"
-                  source: "__GO_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+                  source: "__GOLANG_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
           java:
             - name: "Example get mirroring active topics using Java."
               example: 
