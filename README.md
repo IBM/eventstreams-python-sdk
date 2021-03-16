@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/IBM/eventstreams-python-sdk)
+[![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://api.travis-ci.com/IBM/eventstreams-python-sdk.svg)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 # IBM Cloud Event Streams Python SDK
 
