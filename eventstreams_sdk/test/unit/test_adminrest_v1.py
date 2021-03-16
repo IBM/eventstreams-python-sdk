@@ -25,7 +25,7 @@ import re
 import requests
 import responses
 import urllib
-from ../eventstreams_sdk.adminrest_v1 import *
+from ..eventstreams_sdk.adminrest_v1 import *
 
 
 service = AdminrestV1(
