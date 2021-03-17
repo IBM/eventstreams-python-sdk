@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?&branch=main)](https://travis-ci.com/IBM/eventstreams-python-sdk)
+[![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/IBM/eventstreams-python-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-# IBM Cloud Event Streams Python SDK
+# IBM Cloud Event Streams Python SDK Version 1.1.0
 
 ## Introduction
 
@@ -34,7 +34,6 @@ Changes might occur which impact applications that use this SDK.
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Using the SDK](#using-the-sdk)
-- [REST API documentation](#event-streams-administration-rest-api)
 - [Questions](#questions)
 - [Issues](#issues)
 - [Open source @ IBM](#open-source--ibm)
@@ -54,7 +53,9 @@ Service Name | Imported Class Name
 
 ## Prerequisites
 
-* An [IBM Cloud][https://cloud.ibm.com/registration] account.
+[ibm-cloud-onboarding]: https://cloud.ibm.com/registration
+
+* An [IBM Cloud][ibm-cloud-onboarding] account.
 * The [IBM Cloud CLI.](https://cloud.ibm.com/docs/cli?topic=cli-getting-started)
 * An IAM API key to allow the SDK to access your account. Create one [here](https://cloud.ibm.com/iam/apikeys).
 * A IBM Cloud Eventstreams Instance Create one [here](https://cloud.ibm.com/registration?target=/catalog/services/event-streams)
@@ -65,13 +66,13 @@ Service Name | Imported Class Name
 To install, use `pip` or `easy_install`:
 
 ```bash
-pip install --upgrade "eventstreams-sdk>=0.0.1"
+pip install --upgrade 1.1.0
 ```
 
 or
 
 ```bash
-easy_install --upgrade "eventstreams-sdk>=0.0.1"
+easy_install --upgrade 1.1.0
 ```
 
 ## Using the SDK
@@ -191,7 +192,6 @@ The following sections explain how the REST API works with examples.
 
 ### Code Setup
 
-```python
 	# Code Setup
 	from typing import Set
 	from ibm_cloud_sdk_core.authenticators import BasicAuthenticator
@@ -205,7 +205,7 @@ The following sections explain how the REST API works with examples.
 	API_KEY= os.getenv('API_KEY')
 	
 	# End Code Setup
-```
+
 
 
 ### Authentication
@@ -235,7 +235,6 @@ Use one of the following methods to authenticate:
 Here's an example of how to create the authenticator using either an API key or a BEARER_TOKEN
 
 ```
-```python
 	# Create Authenticator
 	if not KAFKA_ADMIN_URL:
 	    print("Please set env KAFKA_ADMIN_URL")
@@ -260,7 +259,7 @@ Here's an example of how to create the authenticator using either an API key or 
 	    authenticator = authenticator
 	    )
 	# End Authenticator
-```
+
 
 ```
 
@@ -269,12 +268,11 @@ Here's an example of how to create the authenticator using either an API key or 
 ---
 Create a new service object.
 
-```python
 	# Create Service
 	base_url = KAFKA_ADMIN_URL
 	service.set_service_url(base_url)
 	# End Create Service
-```
+
 
 
 ### Creating a Kafka topic
@@ -309,7 +307,6 @@ If the request to create a Kafka topic succeeds then HTTP status code 202 (Accep
 #### Example
 
 ```
-```python
 	def create_topic(service,topic_name):
 	    # Set up parameter values
 	    partition_count = 1
@@ -327,7 +324,7 @@ If the request to create a Kafka topic succeeds then HTTP status code 202 (Accep
 	    except:
 	        print("\tError Creating Topic: " + topic_name)
 	    # func.End
-```
+
 
 ```
 
@@ -344,7 +341,6 @@ Expected return codes:
 - 202: Topic deletion request was accepted.
 - 403: Not authorized to delete topic.
 - 404: Topic does not exist.
-- 422: Semantically invalid request.
   
 A 202 (Accepted) status code is returned if the REST API accepts the delete
 request or status code 422 (Un-processable Entity) if the delete request is
@@ -359,7 +355,6 @@ of time after the completion of a REST request to delete the topic.
 #### Example
 
 ```
-```python
 	def delete_topic(service,topic_name):
 	    # Lets try to delete it.
 	    try:
@@ -371,7 +366,7 @@ of time after the completion of a REST request to delete the topic.
 	    except:
 	        print("\tError Deleting Topic: " + topic_name)
 	    # func.End
-```
+
 
 ```
 
@@ -412,7 +407,6 @@ following properties:
 #### Example
 
 ```
-```python
 	def list_topics(service):
 	    # Set up parameter values
 	    topic_filter = ''
@@ -431,7 +425,7 @@ following properties:
 	    except:
 	        print("\tError Listing Topics")
 	    # func.end
-```
+
 
 ```
 
@@ -476,7 +470,6 @@ Expected status codes
 #### Example
 
 ```
-```python
 	def topic_details(service,topic_name):
 	    # Invoke get method.
 	    try:
@@ -489,7 +482,7 @@ Expected status codes
 	    except:
 	        print("\tError Getting Topic Details: " + topic_name)
 	    # func.End  
-```
+
 
 ```
 
@@ -521,7 +514,6 @@ Expected status codes
 #### Example
 
 ```
-```python
 	def update_topic(service,topic_name):
 	    # Set up parameter values.
 	    new_total_partition_count = 6
@@ -539,7 +531,7 @@ Expected status codes
 	    except:
 	        print("\tError Updating Topic Details: " + topic_name)
 	    # func.End
-```
+
 
 ```
 
@@ -567,7 +559,6 @@ Expected status codes
 #### Example
 
 ```
-```python
 	def get_mirroring_topic_selection(service):
 	    # Invoke get selection method.
 	    try:
@@ -578,7 +569,7 @@ Expected status codes
 	    except:
 	        print("\tError Listing Mirroring Topics:")  
 	    # func.End
-```
+
 
 ```
 
@@ -610,7 +601,6 @@ Expected status codes
 #### Example
 
 ```
-```python
 	def replace_mirroring_topic_selection(service,topic_name):
 	     # Set up parameter values
 	    includes = [topic_name]    
@@ -624,7 +614,7 @@ Expected status codes
 	    except:
 	        print("\tError Replacing Mirroring Topics:") 
 	    # func.End
-```
+
 
 ```
 
@@ -652,7 +642,6 @@ Expected status codes
 #### Example
 
 ```
-```python
 	def get_list_mirroring_active_topics(service):
 	    # Invoke active method.
 	    try:
@@ -664,6 +653,6 @@ Expected status codes
 	    except:
 	        print("\tError Listing Active Mirroring Topics:")  
 	    # func.End
-```
+
 
 ```
