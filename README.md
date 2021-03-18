@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?&branch=main)](https://travis-ci.com/IBM/eventstreams-python-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-# IBM Cloud Event Streams Python SDK
+# IBM Cloud Event Streams Python SDK Version 1.1.0
 
 ## Introduction
 
@@ -11,10 +11,6 @@ Event Streams provides a REST API to help connect your existing systems to your 
 Using the API, you can integrate Event Streams with any system that supports RESTful APIs.
 
 Documentation [IBM Cloud Eventstreams Service APIs](https://cloud.ibm.com/apidocs/event-streams).
-
-
-Disclaimer: this SDK is being released initially as a **pre-release** version.
-Changes might occur which impact applications that use this SDK.
 
 ## Table of Contents
 
@@ -65,13 +61,13 @@ Service Name | Imported Class Name
 To install, use `pip` or `easy_install`:
 
 ```bash
-pip install --upgrade "eventstreams-sdk>=0.0.1"
+pip install --upgrade 1.1.0
 ```
 
 or
 
 ```bash
-easy_install --upgrade "eventstreams-sdk>=0.0.1"
+easy_install --upgrade 1.1.0
 ```
 
 ## Using the SDK
@@ -113,7 +109,7 @@ operations:
   - [Delete a Kafka topic](#deleting-a-kafka-topic)
   - [Update a Kafka topic configuration](#updating-kafka-topics-configuration)
   - [List which topics are mirrored](#list-current-mirroring-topic-selection)
-  - [Replace selection of topics which are mirrored](#replace-mirroring-topic-selection)
+  - [Replace selection of topics which are mirrored](#replace-selection-of-topics-which-are-mirrored)
   - [List active mirroring topics](#list-active-mirroring-topics)
   
 The Admin REST API is also [documented using swagger](./admin-rest-api.yaml).
@@ -192,19 +188,19 @@ The following sections explain how the REST API works with examples.
 ### Code Setup
 
 ```python
-	# Code Setup
-	from typing import Set
-	from ibm_cloud_sdk_core.authenticators import BasicAuthenticator
-	from eventstreams_sdk.adminrest_v1 import *
-	import os
-	from http import HTTPStatus
-	
-	SERVICE_NAME = 'adminrest_v1'
-	KAFKA_ADMIN_URL = os.getenv('KAFKA_ADMIN_URL')
-	BEARER_TOKEN= os.getenv('BEARER_TOKEN')
-	API_KEY= os.getenv('API_KEY')
-	
-	# End Code Setup
+# Code Setup
+from typing import Set
+from ibm_cloud_sdk_core.authenticators import BasicAuthenticator
+from eventstreams_sdk.adminrest_v1 import *
+import os
+from http import HTTPStatus
+
+SERVICE_NAME = 'adminrest_v1'
+KAFKA_ADMIN_URL = os.getenv('KAFKA_ADMIN_URL')
+BEARER_TOKEN= os.getenv('BEARER_TOKEN')
+API_KEY= os.getenv('API_KEY')
+
+# End Code Setup
 ```
 
 
@@ -235,30 +231,30 @@ Use one of the following methods to authenticate:
 Here's an example of how to create the authenticator using either an API key or a BEARER_TOKEN
 
 ```python
-	# Create Authenticator
-	if not KAFKA_ADMIN_URL:
-	    print("Please set env KAFKA_ADMIN_URL")
-	    exit(1)
-	
-	if not API_KEY and not BEARER_TOKEN:
-	    print("Please set either an API_KEY or a BEARER_TOKEN")
-	    exit(1)
-	
-	if API_KEY and BEARER_TOKEN:
-	    print("Please set either an API_KEY or a BEARER_TOKEN not both")
-	    exit(1)
-	
-	if API_KEY:
-	    # Create an Basic IAM authenticator.
-	    authenticator = BasicAuthenticator('token', API_KEY)
-	else :
-	    # Create an IAM Bearer Token authenticator.
-	    authenticator = BasicAuthenticator('token', BEARER_TOKEN)
-	
-	service = AdminrestV1(
-	    authenticator = authenticator
-	    )
-	# End Authenticator
+# Create Authenticator
+if not KAFKA_ADMIN_URL:
+    print("Please set env KAFKA_ADMIN_URL")
+    exit(1)
+
+if not API_KEY and not BEARER_TOKEN:
+    print("Please set either an API_KEY or a BEARER_TOKEN")
+    exit(1)
+
+if API_KEY and BEARER_TOKEN:
+    print("Please set either an API_KEY or a BEARER_TOKEN not both")
+    exit(1)
+
+if API_KEY:
+    # Create an Basic IAM authenticator.
+    authenticator = BasicAuthenticator('token', API_KEY)
+else :
+    # Create an IAM Bearer Token authenticator.
+    authenticator = BasicAuthenticator('token', BEARER_TOKEN)
+
+service = AdminrestV1(
+    authenticator = authenticator
+    )
+# End Authenticator
 ```
 
 
@@ -267,10 +263,10 @@ Here's an example of how to create the authenticator using either an API key or 
 Create a new service object.
 
 ```python
-	# Create Service
-	base_url = KAFKA_ADMIN_URL
-	service.set_service_url(base_url)
-	# End Create Service
+# Create Service
+base_url = KAFKA_ADMIN_URL
+service.set_service_url(base_url)
+# End Create Service
 ```
 
 
@@ -306,23 +302,23 @@ If the request to create a Kafka topic succeeds then HTTP status code 202 (Accep
 #### Example
 
 ```python
-	def create_topic(service,topic_name):
-	    # Set up parameter values
-	    partition_count = 1
-	    configs = []
-	
-	    # Invoke create method.
-	    try:
-	        response = service.create_topic(
-	            name=topic_name,
-	            partition_count=partition_count,
-	            configs=configs,
-	        )
-	        if response.status_code == HTTPStatus.ACCEPTED :  
-	            print("\ttopic created: " + topic_name)
-	    except:
-	        print("\tError Creating Topic: " + topic_name)
-	    # func.End
+def create_topic(service,topic_name):
+    # Set up parameter values
+    partition_count = 1
+    configs = []
+
+    # Invoke create method.
+    try:
+        response = service.create_topic(
+            name=topic_name,
+            partition_count=partition_count,
+            configs=configs,
+        )
+        if response.status_code == HTTPStatus.ACCEPTED :  
+            print("\ttopic created: " + topic_name)
+    except:
+        print("\tError Creating Topic: " + topic_name)
+    # func.End
 ```
 
 
@@ -351,17 +347,17 @@ of time after the completion of a REST request to delete the topic.
 #### Example
 
 ```python
-	def delete_topic(service,topic_name):
-	    # Lets try to delete it.
-	    try:
-	        response = service.delete_topic(
-	            topic_name,
-	            )
-	        if response.status_code == HTTPStatus.ACCEPTED: 
-	            print("\ttopic deleted: "+topic_name)
-	    except:
-	        print("\tError Deleting Topic: " + topic_name)
-	    # func.End
+def delete_topic(service,topic_name):
+    # Lets try to delete it.
+    try:
+        response = service.delete_topic(
+            topic_name,
+            )
+        if response.status_code == HTTPStatus.ACCEPTED: 
+            print("\ttopic deleted: "+topic_name)
+    except:
+        print("\tError Deleting Topic: " + topic_name)
+    # func.End
 ```
 
 
@@ -402,24 +398,24 @@ following properties:
 #### Example
 
 ```python
-	def list_topics(service):
-	    # Set up parameter values
-	    topic_filter = ''
-	    # Invoke list method.
-	    try:
-	        response = service.list_topics(
-	            topic_filter=topic_filter,
-	            )
-	
-	        if response.status_code == HTTPStatus.OK:
-	            if not response.result :
-	                print("\tnothing to list")
-	                return
-	            for topic in response.result: 
-	                 print("\t" + topic["name"])
-	    except:
-	        print("\tError Listing Topics")
-	    # func.end
+def list_topics(service):
+    # Set up parameter values
+    topic_filter = ''
+    # Invoke list method.
+    try:
+        response = service.list_topics(
+            topic_filter=topic_filter,
+            )
+
+        if response.status_code == HTTPStatus.OK:
+            if not response.result :
+                print("\tnothing to list")
+                return
+            for topic in response.result: 
+                 print("\t" + topic["name"])
+    except:
+        print("\tError Listing Topics")
+    # func.end
 ```
 
 
@@ -464,18 +460,18 @@ Expected status codes
 #### Example
 
 ```python
-	def topic_details(service,topic_name):
-	    # Invoke get method.
-	    try:
-	        response = service.get_topic(
-	            topic_name,
-	            )
-	        if response.status_code == HTTPStatus.OK:  
-	            for key, value in response.result.items(): 
-	                print("\t" +key + ":" + str(value) )
-	    except:
-	        print("\tError Getting Topic Details: " + topic_name)
-	    # func.End  
+def topic_details(service,topic_name):
+    # Invoke get method.
+    try:
+        response = service.get_topic(
+            topic_name,
+            )
+        if response.status_code == HTTPStatus.OK:  
+            for key, value in response.result.items(): 
+                print("\t" +key + ":" + str(value) )
+    except:
+        print("\tError Getting Topic Details: " + topic_name)
+    # func.End  
 ```
 
 
@@ -507,23 +503,23 @@ Expected status codes
 #### Example
 
 ```python
-	def update_topic(service,topic_name):
-	    # Set up parameter values.
-	    new_total_partition_count = 6
-	    configs = []
-	
-	    # Invoke update method.
-	    try:
-	        response = service.update_topic(
-	            topic_name,
-	            new_total_partition_count=new_total_partition_count,
-	            configs=configs,
-	        )
-	        if response.status_code == HTTPStatus.ACCEPTED :
-	            print("\ttopic updated: "+topic_name)
-	    except:
-	        print("\tError Updating Topic Details: " + topic_name)
-	    # func.End
+def update_topic(service,topic_name):
+    # Set up parameter values.
+    new_total_partition_count = 6
+    configs = []
+
+    # Invoke update method.
+    try:
+        response = service.update_topic(
+            topic_name,
+            new_total_partition_count=new_total_partition_count,
+            configs=configs,
+        )
+        if response.status_code == HTTPStatus.ACCEPTED :
+            print("\ttopic updated: "+topic_name)
+    except:
+        print("\tError Updating Topic Details: " + topic_name)
+    # func.End
 ```
 
 
@@ -551,16 +547,16 @@ Expected status codes
 #### Example
 
 ```python
-	def get_mirroring_topic_selection(service):
-	    # Invoke get selection method.
-	    try:
-	        response = service.get_mirroring_topic_selection()
-	        if response.status_code == HTTPStatus.OK :
-	            for topic in response.result: 
-	                 print("\t" + topic["name"])
-	    except:
-	        print("\tError Listing Mirroring Topics:")  
-	    # func.End
+def get_mirroring_topic_selection(service):
+    # Invoke get selection method.
+    try:
+        response = service.get_mirroring_topic_selection()
+        if response.status_code == HTTPStatus.OK :
+            for topic in response.result: 
+                 print("\t" + topic["name"])
+    except:
+        print("\tError Listing Mirroring Topics:")  
+    # func.End
 ```
 
 
@@ -592,19 +588,19 @@ Expected status codes
 #### Example
 
 ```python
-	def replace_mirroring_topic_selection(service,topic_name):
-	     # Set up parameter values
-	    includes = [topic_name]    
-	    # Invoke replace method.
-	    try:
-	        response = service.replace_mirroring_topic_selection(
-	            includes=[topic_name],
-	        )
-	        if response.status_code == HTTPStatus.OK :
-	            print("\tmirroring topic selection updated: "+includes)
-	    except:
-	        print("\tError Replacing Mirroring Topics:") 
-	    # func.End
+def replace_mirroring_topic_selection(service,topic_name):
+     # Set up parameter values
+    includes = [topic_name]    
+    # Invoke replace method.
+    try:
+        response = service.replace_mirroring_topic_selection(
+            includes=[topic_name],
+        )
+        if response.status_code == HTTPStatus.OK :
+            print("\tmirroring topic selection updated: "+includes)
+    except:
+        print("\tError Replacing Mirroring Topics:") 
+    # func.End
 ```
 
 
@@ -632,16 +628,16 @@ Expected status codes
 #### Example
 
 ```python
-	def get_list_mirroring_active_topics(service):
-	    # Invoke active method.
-	    try:
-	        response = service.get_list_mirroring_active_topics()
-	        if response.status_code == HTTPStatus.OK :
-	            for topic in response.result: 
-	                 print("\t" + topic["name"])
-	        print("\tactive mirroring topics updated:")
-	    except:
-	        print("\tError Listing Active Mirroring Topics:")  
-	    # func.End
+def get_list_mirroring_active_topics(service):
+    # Invoke active method.
+    try:
+        response = service.get_list_mirroring_active_topics()
+        if response.status_code == HTTPStatus.OK :
+            for topic in response.result: 
+                 print("\t" + topic["name"])
+        print("\tactive mirroring topics updated:")
+    except:
+        print("\tError Listing Active Mirroring Topics:")  
+    # func.End
 ```
 
