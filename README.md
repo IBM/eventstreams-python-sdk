@@ -58,16 +58,16 @@ Service Name | Imported Class Name
 
 ## Installation
 
-To install, use `pip` or `easy_install`:
+To install, use `pip3` or `easy_install3.5`:
 
 ```bash
-pip install --upgrade 1.1.0
+pip3 install --upgrade "eventstreams_sdk>=1.1.0"
 ```
 
 or
 
 ```bash
-easy_install --upgrade 1.1.0
+easy_install3.5 --upgrade "eventstreams_sdk>=1.1.0"
 ```
 
 ## Using the SDK
@@ -168,7 +168,7 @@ To run the example :-
 
 Set the required environment variables
 ```sh
-# Set you API KEY.
+# Set your API KEY (or a bearer token could be used by setting the BEARER_TOKEN environment variable instead, but not both)
 export API_KEY="abc123456789"
 
 # Set the Admin Endpoint to point to your cluster.
