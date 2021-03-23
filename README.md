@@ -203,7 +203,6 @@ API_KEY= os.getenv('API_KEY')
 # End Code Setup
 ```
 
-
 ### Authentication
 ---
 Use one of the following methods to authenticate:
@@ -257,7 +256,6 @@ service = AdminrestV1(
 # End Authenticator
 ```
 
-
 ### Creating a client for the Admin REST API.
 ---
 Create a new service object.
@@ -268,7 +266,6 @@ base_url = KAFKA_ADMIN_URL
 service.set_service_url(base_url)
 # End Create Service
 ```
-
 
 ### Creating a Kafka topic
 ---
@@ -322,7 +319,6 @@ def create_topic(service,topic_name):
 ```
 
 
-
 ### Deleting a Kafka topic
 ---
 To delete a Kafka topic, the admin REST SDK issues a DELETE request to the `/admin/topics/TOPICNAME`
@@ -359,7 +355,6 @@ def delete_topic(service,topic_name):
         print("\tError Deleting Topic: " + topic_name)
     # func.End
 ```
-
 
 ### Listing Kafka topics
 ---
@@ -418,7 +413,6 @@ def list_topics(service):
     # func.end
 ```
 
-
 ### Getting a Kafka topic
 ---
 To get a Kafka topic detail information, issue a GET request to the `/admin/topics/TOPICNAME`
@@ -474,7 +468,6 @@ def topic_details(service,topic_name):
     # func.End  
 ```
 
-
 ### Updating Kafka topic's configuration
 ---
 To increase a Kafka topic's partition number or to update a Kafka topic's configuration, issue a
@@ -522,7 +515,6 @@ def update_topic(service,topic_name):
     # func.End
 ```
 
-
 ### List current mirroring topic selection
 
 Mirroring user controls are only available on the target cluster in a mirroring environment.
@@ -558,7 +550,6 @@ def get_mirroring_topic_selection(service):
         print("\tError Listing Mirroring Topics:")  
     # func.End
 ```
-
 
 ### Replace selection of topics which are mirrored
 
@@ -603,7 +594,6 @@ def replace_mirroring_topic_selection(service,topic_name):
     # func.End
 ```
 
-
 ### List active mirroring topics
 ---
 Mirroring user controls are available on the target cluster in a mirroring environment.
@@ -640,4 +630,3 @@ def get_list_mirroring_active_topics(service):
         print("\tError Listing Active Mirroring Topics:")  
     # func.End
 ```
-
