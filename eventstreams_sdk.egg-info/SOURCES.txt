@@ -1,0 +1,16 @@
+LICENSE
+MANIFEST.in
+README.md
+requirements-dev.txt
+requirements.txt
+setup.py
+eventstreams_sdk/__init__.py
+eventstreams_sdk/adminrest_v1.py
+eventstreams_sdk/common.py
+eventstreams_sdk/version.py
+eventstreams_sdk.egg-info/PKG-INFO
+eventstreams_sdk.egg-info/SOURCES.txt
+eventstreams_sdk.egg-info/dependency_links.txt
+eventstreams_sdk.egg-info/requires.txt
+eventstreams_sdk.egg-info/top_level.txt
+eventstreams_sdk.egg-info/zip-safe
