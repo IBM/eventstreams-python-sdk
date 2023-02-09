@@ -431,6 +431,236 @@ class AdminrestV1(BaseService):
         response = self.send(request)
         return response
 
+    #########################
+    # Quota Operations
+    #########################
+
+
+    def create_quota(self,
+        entity_name: str,
+        *,
+        producer_byte_rate: int = None,
+        consumer_byte_rate: int = None,
+        **kwargs
+    ) -> DetailedResponse:
+        """
+        Create a new quota.
+
+        Create a new quota.
+
+        :param str entity_name: The entity name of the quotas can be `default` or
+               an IAM Service ID that starts with an `iam-ServiceId` prefix.
+        :param int producer_byte_rate: (optional) The producer byte rate quota
+               value.
+        :param int consumer_byte_rate: (optional) The consumer byte rate quota
+               value.
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse
+        """
+
+        if not entity_name:
+            raise ValueError('entity_name must be provided')
+        headers = {}
+        sdk_headers = get_sdk_headers(service_name=self.DEFAULT_SERVICE_NAME,
+                                      service_version='V1',
+                                      operation_id='create_quota')
+        headers.update(sdk_headers)
+
+        data = {
+            'producer_byte_rate': producer_byte_rate,
+            'consumer_byte_rate': consumer_byte_rate,
+        }
+        data = {k: v for (k, v) in data.items() if v is not None}
+        data = json.dumps(data)
+        headers['content-type'] = 'application/json'
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+
+        path_param_keys = ['entity_name']
+        path_param_values = self.encode_path_vars(entity_name)
+        path_param_dict = dict(zip(path_param_keys, path_param_values))
+        url = '/admin/quotas/{entity_name}'.format(**path_param_dict)
+        request = self.prepare_request(method='POST',
+                                       url=url,
+                                       headers=headers,
+                                       data=data)
+
+        response = self.send(request, **kwargs)
+        return response
+
+
+    def update_quota(self,
+        entity_name: str,
+        *,
+        producer_byte_rate: int = None,
+        consumer_byte_rate: int = None,
+        **kwargs
+    ) -> DetailedResponse:
+        """
+        Update a quota.
+
+        Update an entity's quota.
+
+        :param str entity_name: The entity name of the quotas can be `default` or
+               an IAM Service ID that starts with an `iam-ServiceId` prefix.
+        :param int producer_byte_rate: (optional) The producer byte rate quota
+               value.
+        :param int consumer_byte_rate: (optional) The consumer byte rate quota
+               value.
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse
+        """
+
+        if not entity_name:
+            raise ValueError('entity_name must be provided')
+        headers = {}
+        sdk_headers = get_sdk_headers(service_name=self.DEFAULT_SERVICE_NAME,
+                                      service_version='V1',
+                                      operation_id='update_quota')
+        headers.update(sdk_headers)
+
+        data = {
+            'producer_byte_rate': producer_byte_rate,
+            'consumer_byte_rate': consumer_byte_rate,
+        }
+        data = {k: v for (k, v) in data.items() if v is not None}
+        data = json.dumps(data)
+        headers['content-type'] = 'application/json'
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+
+        path_param_keys = ['entity_name']
+        path_param_values = self.encode_path_vars(entity_name)
+        path_param_dict = dict(zip(path_param_keys, path_param_values))
+        url = '/admin/quotas/{entity_name}'.format(**path_param_dict)
+        request = self.prepare_request(method='PATCH',
+                                       url=url,
+                                       headers=headers,
+                                       data=data)
+
+        response = self.send(request, **kwargs)
+        return response
+
+
+    def delete_quota(self,
+        entity_name: str,
+        **kwargs
+    ) -> DetailedResponse:
+        """
+        Delete a quota.
+
+        Delete an entity's quota.
+
+        :param str entity_name: The entity name of the quotas can be `default` or
+               an IAM Service ID that starts with an `iam-ServiceId` prefix.
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse
+        """
+
+        if not entity_name:
+            raise ValueError('entity_name must be provided')
+        headers = {}
+        sdk_headers = get_sdk_headers(service_name=self.DEFAULT_SERVICE_NAME,
+                                      service_version='V1',
+                                      operation_id='delete_quota')
+        headers.update(sdk_headers)
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+
+        path_param_keys = ['entity_name']
+        path_param_values = self.encode_path_vars(entity_name)
+        path_param_dict = dict(zip(path_param_keys, path_param_values))
+        url = '/admin/quotas/{entity_name}'.format(**path_param_dict)
+        request = self.prepare_request(method='DELETE',
+                                       url=url,
+                                       headers=headers)
+
+        response = self.send(request, **kwargs)
+        return response
+
+
+    def get_quota(self,
+        entity_name: str,
+        **kwargs
+    ) -> DetailedResponse:
+        """
+        Get quota information for an entity.
+
+        Get quota information for an entity.
+
+        :param str entity_name: The entity name of the quotas can be `default` or
+               an IAM Service ID that starts with an `iam-ServiceId` prefix.
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse with `dict` result representing a `QuotaDetail` object
+        """
+
+        if not entity_name:
+            raise ValueError('entity_name must be provided')
+        headers = {}
+        sdk_headers = get_sdk_headers(service_name=self.DEFAULT_SERVICE_NAME,
+                                      service_version='V1',
+                                      operation_id='get_quota')
+        headers.update(sdk_headers)
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+        headers['Accept'] = 'application/json'
+
+        path_param_keys = ['entity_name']
+        path_param_values = self.encode_path_vars(entity_name)
+        path_param_dict = dict(zip(path_param_keys, path_param_values))
+        url = '/admin/quotas/{entity_name}'.format(**path_param_dict)
+        request = self.prepare_request(method='GET',
+                                       url=url,
+                                       headers=headers)
+
+        response = self.send(request, **kwargs)
+        return response
+
+
+    def list_quotas(self,
+        **kwargs
+    ) -> DetailedResponse:
+        """
+        List each entity's quota information.
+
+        List each entity's quota information.
+
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse with `dict` result representing a `EntityQuotasList` object
+        """
+
+        headers = {}
+        sdk_headers = get_sdk_headers(service_name=self.DEFAULT_SERVICE_NAME,
+                                      service_version='V1',
+                                      operation_id='list_quotas')
+        headers.update(sdk_headers)
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+        headers['Accept'] = 'application/json'
+
+        url = '/admin/quotas'
+        request = self.prepare_request(method='GET',
+                                       url=url,
+                                       headers=headers)
+
+        response = self.send(request, **kwargs)
+        return response
+
 
 ##############################################################################
 # Models
@@ -1023,3 +1253,205 @@ class TopicDetail():
     def __ne__(self, other: 'TopicDetail') -> bool:
         """Return `true` when self and other are not equal, false otherwise."""
         return not self == other
+
+class EntityQuotaDetail():
+    """
+    EntityQuotaDetail.
+
+    :attr str entity_name: The name of the entity.
+    :attr int producer_byte_rate: (optional) The producer byte rate quota value.
+    :attr int consumer_byte_rate: (optional) The consumer byte rate quota value.
+    """
+
+    def __init__(self,
+                 entity_name: str,
+                 *,
+                 producer_byte_rate: int = None,
+                 consumer_byte_rate: int = None) -> None:
+        """
+        Initialize a EntityQuotaDetail object.
+
+        :param str entity_name: The name of the entity.
+        :param int producer_byte_rate: (optional) The producer byte rate quota
+               value.
+        :param int consumer_byte_rate: (optional) The consumer byte rate quota
+               value.
+        """
+        self.entity_name = entity_name
+        self.producer_byte_rate = producer_byte_rate
+        self.consumer_byte_rate = consumer_byte_rate
+
+    @classmethod
+    def from_dict(cls, _dict: Dict) -> 'EntityQuotaDetail':
+        """Initialize a EntityQuotaDetail object from a json dictionary."""
+        args = {}
+        if 'entity_name' in _dict:
+            args['entity_name'] = _dict.get('entity_name')
+        else:
+            raise ValueError('Required property \'entity_name\' not present in EntityQuotaDetail JSON')
+        if 'producer_byte_rate' in _dict:
+            args['producer_byte_rate'] = _dict.get('producer_byte_rate')
+        if 'consumer_byte_rate' in _dict:
+            args['consumer_byte_rate'] = _dict.get('consumer_byte_rate')
+        return cls(**args)
+
+    @classmethod
+    def _from_dict(cls, _dict):
+        """Initialize a EntityQuotaDetail object from a json dictionary."""
+        return cls.from_dict(_dict)
+
+    def to_dict(self) -> Dict:
+        """Return a json dictionary representing this model."""
+        _dict = {}
+        if hasattr(self, 'entity_name') and self.entity_name is not None:
+            _dict['entity_name'] = self.entity_name
+        if hasattr(self, 'producer_byte_rate') and self.producer_byte_rate is not None:
+            _dict['producer_byte_rate'] = self.producer_byte_rate
+        if hasattr(self, 'consumer_byte_rate') and self.consumer_byte_rate is not None:
+            _dict['consumer_byte_rate'] = self.consumer_byte_rate
+        return _dict
+
+    def _to_dict(self):
+        """Return a json dictionary representing this model."""
+        return self.to_dict()
+
+    def __str__(self) -> str:
+        """Return a `str` version of this EntityQuotaDetail object."""
+        return json.dumps(self.to_dict(), indent=2)
+
+    def __eq__(self, other: 'EntityQuotaDetail') -> bool:
+        """Return `true` when self and other are equal, false otherwise."""
+        if not isinstance(other, self.__class__):
+            return False
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other: 'EntityQuotaDetail') -> bool:
+        """Return `true` when self and other are not equal, false otherwise."""
+        return not self == other
+
+class EntityQuotasList():
+    """
+    A list of 'entity_quota_detail' is returned.
+
+    :attr List[EntityQuotaDetail] data: (optional)
+    """
+
+    def __init__(self,
+                 *,
+                 data: List['EntityQuotaDetail'] = None) -> None:
+        """
+        Initialize a EntityQuotasList object.
+
+        :param List[EntityQuotaDetail] data: (optional)
+        """
+        self.data = data
+
+    @classmethod
+    def from_dict(cls, _dict: Dict) -> 'EntityQuotasList':
+        """Initialize a EntityQuotasList object from a json dictionary."""
+        args = {}
+        if 'data' in _dict:
+            args['data'] = [EntityQuotaDetail.from_dict(v) for v in _dict.get('data')]
+        return cls(**args)
+
+    @classmethod
+    def _from_dict(cls, _dict):
+        """Initialize a EntityQuotasList object from a json dictionary."""
+        return cls.from_dict(_dict)
+
+    def to_dict(self) -> Dict:
+        """Return a json dictionary representing this model."""
+        _dict = {}
+        if hasattr(self, 'data') and self.data is not None:
+            data_list = []
+            for v in self.data:
+                if isinstance(v, dict):
+                    data_list.append(v)
+                else:
+                    data_list.append(v.to_dict())
+            _dict['data'] = data_list
+        return _dict
+
+    def _to_dict(self):
+        """Return a json dictionary representing this model."""
+        return self.to_dict()
+
+    def __str__(self) -> str:
+        """Return a `str` version of this EntityQuotasList object."""
+        return json.dumps(self.to_dict(), indent=2)
+
+    def __eq__(self, other: 'EntityQuotasList') -> bool:
+        """Return `true` when self and other are equal, false otherwise."""
+        if not isinstance(other, self.__class__):
+            return False
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other: 'EntityQuotasList') -> bool:
+        """Return `true` when self and other are not equal, false otherwise."""
+        return not self == other
+
+class QuotaDetail():
+    """
+    QuotaDetail.
+
+    :attr int producer_byte_rate: (optional) The producer byte rate quota value.
+    :attr int consumer_byte_rate: (optional) The consumer byte rate quota value.
+    """
+
+    def __init__(self,
+                 *,
+                 producer_byte_rate: int = None,
+                 consumer_byte_rate: int = None) -> None:
+        """
+        Initialize a QuotaDetail object.
+
+        :param int producer_byte_rate: (optional) The producer byte rate quota
+               value.
+        :param int consumer_byte_rate: (optional) The consumer byte rate quota
+               value.
+        """
+        self.producer_byte_rate = producer_byte_rate
+        self.consumer_byte_rate = consumer_byte_rate
+
+    @classmethod
+    def from_dict(cls, _dict: Dict) -> 'QuotaDetail':
+        """Initialize a QuotaDetail object from a json dictionary."""
+        args = {}
+        if 'producer_byte_rate' in _dict:
+            args['producer_byte_rate'] = _dict.get('producer_byte_rate')
+        if 'consumer_byte_rate' in _dict:
+            args['consumer_byte_rate'] = _dict.get('consumer_byte_rate')
+        return cls(**args)
+
+    @classmethod
+    def _from_dict(cls, _dict):
+        """Initialize a QuotaDetail object from a json dictionary."""
+        return cls.from_dict(_dict)
+
+    def to_dict(self) -> Dict:
+        """Return a json dictionary representing this model."""
+        _dict = {}
+        if hasattr(self, 'producer_byte_rate') and self.producer_byte_rate is not None:
+            _dict['producer_byte_rate'] = self.producer_byte_rate
+        if hasattr(self, 'consumer_byte_rate') and self.consumer_byte_rate is not None:
+            _dict['consumer_byte_rate'] = self.consumer_byte_rate
+        return _dict
+
+    def _to_dict(self):
+        """Return a json dictionary representing this model."""
+        return self.to_dict()
+
+    def __str__(self) -> str:
+        """Return a `str` version of this QuotaDetail object."""
+        return json.dumps(self.to_dict(), indent=2)
+
+    def __eq__(self, other: 'QuotaDetail') -> bool:
+        """Return `true` when self and other are equal, false otherwise."""
+        if not isinstance(other, self.__class__):
+            return False
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other: 'QuotaDetail') -> bool:
+        """Return `true` when self and other are not equal, false otherwise."""
+        return not self == other
+

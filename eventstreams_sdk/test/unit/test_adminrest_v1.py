@@ -515,6 +515,401 @@ class TestGetMirroringActiveTopics():
 # End of Service: Default
 ##############################################################################
 
+##############################################################################
+# Start of Service: QuotaOperations
+##############################################################################
+# region
+
+class TestCreateQuota():
+    """
+    Test Class for create_quota
+    """
+
+    def preprocess_url(self, request_url: str):
+        """
+        Preprocess the request URL to ensure the mock response will be found.
+        """
+        if re.fullmatch('.*/+', request_url) is None:
+            return request_url
+        else:
+            return re.compile(request_url.rstrip('/') + '/+')
+            
+    @responses.activate
+    def test_create_quota_all_params(self):
+        """
+        create_quota()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.POST,
+                      url,
+                      status=201)
+
+        # Set up parameter values
+        entity_name = 'testString'
+        producer_byte_rate = 1024
+        consumer_byte_rate = 1024
+
+        # Invoke method
+        response = service.create_quota(
+            entity_name,
+            producer_byte_rate=producer_byte_rate,
+            consumer_byte_rate=consumer_byte_rate,
+            headers={}
+        )
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 201
+        # Validate body params
+        req_body = json.loads(str(responses.calls[0].request.body, 'utf-8'))
+        assert req_body['producer_byte_rate'] == 1024
+        assert req_body['consumer_byte_rate'] == 1024
+
+    def test_create_quota_all_params_with_retries(self):
+        # Enable retries and run test_create_quota_all_params.
+        service.enable_retries()
+        self.test_create_quota_all_params()
+
+        # Disable retries and run test_create_quota_all_params.
+        service.disable_retries()
+        self.test_create_quota_all_params()
+
+    @responses.activate
+    def test_create_quota_value_error(self):
+        """
+        test_create_quota_value_error()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.POST,
+                      url,
+                      status=201)
+
+        # Set up parameter values
+        entity_name = 'testString'
+        producer_byte_rate = 1024
+        consumer_byte_rate = 1024
+
+        # Pass in all but one required param and check for a ValueError
+        req_param_dict = {
+            "entity_name": entity_name,
+        }
+        for param in req_param_dict.keys():
+            req_copy = {key:val if key is not param else None for (key,val) in req_param_dict.items()}
+            with pytest.raises(ValueError):
+                service.create_quota(**req_copy)
+
+    def test_create_quota_value_error_with_retries(self):
+        # Enable retries and run test_create_quota_value_error.
+        service.enable_retries()
+        self.test_create_quota_value_error()
+
+        # Disable retries and run test_create_quota_value_error.
+        service.disable_retries()
+        self.test_create_quota_value_error()
+class TestUpdateQuota():
+    """
+    Test Class for update_quota
+    """
+
+    def preprocess_url(self, request_url: str):
+        """
+        Preprocess the request URL to ensure the mock response will be found.
+        """
+        if re.fullmatch('.*/+', request_url) is None:
+            return request_url
+        else:
+            return re.compile(request_url.rstrip('/') + '/+')
+
+    @responses.activate
+    def test_update_quota_all_params(self):
+        """
+        update_quota()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.PATCH,
+                      url,
+                      status=202)
+
+        # Set up parameter values
+        entity_name = 'testString'
+        producer_byte_rate = 1024
+        consumer_byte_rate = 1024
+
+        # Invoke method
+        response = service.update_quota(
+            entity_name,
+            producer_byte_rate=producer_byte_rate,
+            consumer_byte_rate=consumer_byte_rate,
+            headers={}
+        )
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 202
+        # Validate body params
+        req_body = json.loads(str(responses.calls[0].request.body, 'utf-8'))
+        assert req_body['producer_byte_rate'] == 1024
+        assert req_body['consumer_byte_rate'] == 1024
+
+    def test_update_quota_all_params_with_retries(self):
+        # Enable retries and run test_update_quota_all_params.
+        service.enable_retries()
+        self.test_update_quota_all_params()
+
+        # Disable retries and run test_update_quota_all_params.
+        service.disable_retries()
+        self.test_update_quota_all_params()
+
+    @responses.activate
+    def test_update_quota_value_error(self):
+        """
+        test_update_quota_value_error()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.PATCH,
+                      url,
+                      status=202)
+
+        # Set up parameter values
+        entity_name = 'testString'
+        producer_byte_rate = 1024
+        consumer_byte_rate = 1024
+
+        # Pass in all but one required param and check for a ValueError
+        req_param_dict = {
+            "entity_name": entity_name,
+        }
+        for param in req_param_dict.keys():
+            req_copy = {key:val if key is not param else None for (key,val) in req_param_dict.items()}
+            with pytest.raises(ValueError):
+                service.update_quota(**req_copy)
+
+    def test_update_quota_value_error_with_retries(self):
+        # Enable retries and run test_update_quota_value_error.
+        service.enable_retries()
+        self.test_update_quota_value_error()
+
+        # Disable retries and run test_update_quota_value_error.
+        service.disable_retries()
+        self.test_update_quota_value_error()
+
+class TestDeleteQuota():
+    """
+    Test Class for delete_quota
+    """
+
+    def preprocess_url(self, request_url: str):
+        """
+        Preprocess the request URL to ensure the mock response will be found.
+        """
+        if re.fullmatch('.*/+', request_url) is None:
+            return request_url
+        else:
+            return re.compile(request_url.rstrip('/') + '/+')
+
+    @responses.activate
+    def test_delete_quota_all_params(self):
+        """
+        delete_quota()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.DELETE,
+                      url,
+                      status=202)
+
+        # Set up parameter values
+        entity_name = 'testString'
+
+        # Invoke method
+        response = service.delete_quota(
+            entity_name,
+            headers={}
+        )
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 202
+
+    def test_delete_quota_all_params_with_retries(self):
+        # Enable retries and run test_delete_quota_all_params.
+        service.enable_retries()
+        self.test_delete_quota_all_params()
+
+        # Disable retries and run test_delete_quota_all_params.
+        service.disable_retries()
+        self.test_delete_quota_all_params()
+
+    @responses.activate
+    def test_delete_quota_value_error(self):
+        """
+        test_delete_quota_value_error()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        responses.add(responses.DELETE,
+                      url,
+                      status=202)
+
+        # Set up parameter values
+        entity_name = 'testString'
+
+        # Pass in all but one required param and check for a ValueError
+        req_param_dict = {
+            "entity_name": entity_name,
+        }
+        for param in req_param_dict.keys():
+            req_copy = {key:val if key is not param else None for (key,val) in req_param_dict.items()}
+            with pytest.raises(ValueError):
+                service.delete_quota(**req_copy)
+
+    def test_delete_quota_value_error_with_retries(self):
+        # Enable retries and run test_delete_quota_value_error.
+        service.enable_retries()
+        self.test_delete_quota_value_error()
+
+        # Disable retries and run test_delete_quota_value_error.
+        service.disable_retries()
+        self.test_delete_quota_value_error()
+
+class TestGetQuota():
+    """
+    Test Class for get_quota
+    """
+
+    def preprocess_url(self, request_url: str):
+        """
+        Preprocess the request URL to ensure the mock response will be found.
+        """
+        if re.fullmatch('.*/+', request_url) is None:
+            return request_url
+        else:
+            return re.compile(request_url.rstrip('/') + '/+')
+
+    @responses.activate
+    def test_get_quota_all_params(self):
+        """
+        get_quota()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        mock_response = '{"producer_byte_rate": 1024, "consumer_byte_rate": 1024}'
+        responses.add(responses.GET,
+                      url,
+                      body=mock_response,
+                      content_type='application/json',
+                      status=200)
+
+        # Set up parameter values
+        entity_name = 'testString'
+
+        # Invoke method
+        response = service.get_quota(
+            entity_name,
+            headers={}
+        )
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 200
+
+    def test_get_quota_all_params_with_retries(self):
+        # Enable retries and run test_get_quota_all_params.
+        service.enable_retries()
+        self.test_get_quota_all_params()
+
+        # Disable retries and run test_get_quota_all_params.
+        service.disable_retries()
+        self.test_get_quota_all_params()
+
+    @responses.activate
+    def test_get_quota_value_error(self):
+        """
+        test_get_quota_value_error()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas/testString')
+        mock_response = '{"producer_byte_rate": 1024, "consumer_byte_rate": 1024}'
+        responses.add(responses.GET,
+                      url,
+                      body=mock_response,
+                      content_type='application/json',
+                      status=200)
+
+        # Set up parameter values
+        entity_name = 'testString'
+
+        # Pass in all but one required param and check for a ValueError
+        req_param_dict = {
+            "entity_name": entity_name,
+        }
+        for param in req_param_dict.keys():
+            req_copy = {key:val if key is not param else None for (key,val) in req_param_dict.items()}
+            with pytest.raises(ValueError):
+                service.get_quota(**req_copy)
+
+    def test_get_quota_value_error_with_retries(self):
+        # Enable retries and run test_get_quota_value_error.
+        service.enable_retries()
+        self.test_get_quota_value_error()
+
+        # Disable retries and run test_get_quota_value_error.
+        service.disable_retries()
+        self.test_get_quota_value_error()
+
+class TestListQuotas():
+    """
+    Test Class for list_quotas
+    """
+
+    def preprocess_url(self, request_url: str):
+        """
+        Preprocess the request URL to ensure the mock response will be found.
+        """
+        if re.fullmatch('.*/+', request_url) is None:
+            return request_url
+        else:
+            return re.compile(request_url.rstrip('/') + '/+')
+
+    @responses.activate
+    def test_list_quotas_all_params(self):
+        """
+        list_quotas()
+        """
+        # Set up mock
+        url = self.preprocess_url(base_url+'/admin/quotas')
+        mock_response = '{"data": [{"entity_name": "entity_name", "producer_byte_rate": 18, "consumer_byte_rate": 18}]}'
+        responses.add(responses.GET,
+                      url,
+                      body=mock_response,
+                      content_type='application/json',
+                      status=200)
+
+        # Invoke method
+        response = service.list_quotas()
+
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 200
+
+    def test_list_quotas_all_params_with_retries(self):
+        # Enable retries and run test_list_quotas_all_params.
+        service.enable_retries()
+        self.test_list_quotas_all_params()
+
+        # Disable retries and run test_list_quotas_all_params.
+        service.disable_retries()
+        self.test_list_quotas_all_params()
+
+# endregion
+##############################################################################
+# End of Service: QuotaOperations
+##############################################################################
 
 ##############################################################################
 # Start of Model Tests
@@ -791,7 +1186,101 @@ class TestTopicDetail():
         topic_detail_model_json2 = topic_detail_model.to_dict()
         assert topic_detail_model_json2 == topic_detail_model_json
 
+class TestModel_EntityQuotaDetail():
+    """
+    Test Class for EntityQuotaDetail
+    """
 
+    def test_entity_quota_detail_serialization(self):
+        """
+        Test serialization/deserialization for EntityQuotaDetail
+        """
+
+        # Construct a json representation of a EntityQuotaDetail model
+        entity_quota_detail_model_json = {}
+        entity_quota_detail_model_json['entity_name'] = 'testString'
+        entity_quota_detail_model_json['producer_byte_rate'] = 26
+        entity_quota_detail_model_json['consumer_byte_rate'] = 26
+
+        # Construct a model instance of EntityQuotaDetail by calling from_dict on the json representation
+        entity_quota_detail_model = EntityQuotaDetail.from_dict(entity_quota_detail_model_json)
+        assert entity_quota_detail_model != False
+
+        # Construct a model instance of EntityQuotaDetail by calling from_dict on the json representation
+        entity_quota_detail_model_dict = EntityQuotaDetail.from_dict(entity_quota_detail_model_json).__dict__
+        entity_quota_detail_model2 = EntityQuotaDetail(**entity_quota_detail_model_dict)
+
+        # Verify the model instances are equivalent
+        assert entity_quota_detail_model == entity_quota_detail_model2
+
+        # Convert model instance back to dict and verify no loss of data
+        entity_quota_detail_model_json2 = entity_quota_detail_model.to_dict()
+        assert entity_quota_detail_model_json2 == entity_quota_detail_model_json
+
+class TestModel_EntityQuotasList():
+    """
+    Test Class for EntityQuotasList
+    """
+
+    def test_entity_quotas_list_serialization(self):
+        """
+        Test serialization/deserialization for EntityQuotasList
+        """
+
+        # Construct dict forms of any model objects needed in order to build this model.
+
+        entity_quota_detail_model = {} # EntityQuotaDetail
+        entity_quota_detail_model['entity_name'] = 'default'
+        entity_quota_detail_model['producer_byte_rate'] = 1024
+        entity_quota_detail_model['consumer_byte_rate'] = 1024
+
+        # Construct a json representation of a EntityQuotasList model
+        entity_quotas_list_model_json = {}
+        entity_quotas_list_model_json['data'] = [entity_quota_detail_model]
+
+        # Construct a model instance of EntityQuotasList by calling from_dict on the json representation
+        entity_quotas_list_model = EntityQuotasList.from_dict(entity_quotas_list_model_json)
+        assert entity_quotas_list_model != False
+
+        # Construct a model instance of EntityQuotasList by calling from_dict on the json representation
+        entity_quotas_list_model_dict = EntityQuotasList.from_dict(entity_quotas_list_model_json).__dict__
+        entity_quotas_list_model2 = EntityQuotasList(**entity_quotas_list_model_dict)
+
+        # Verify the model instances are equivalent
+        assert entity_quotas_list_model == entity_quotas_list_model2
+
+        # Convert model instance back to dict and verify no loss of data
+        entity_quotas_list_model_json2 = entity_quotas_list_model.to_dict()
+        assert entity_quotas_list_model_json2 == entity_quotas_list_model_json
+class TestModel_QuotaDetail():
+    """
+    Test Class for QuotaDetail
+    """
+
+    def test_quota_detail_serialization(self):
+        """
+        Test serialization/deserialization for QuotaDetail
+        """
+
+        # Construct a json representation of a QuotaDetail model
+        quota_detail_model_json = {}
+        quota_detail_model_json['producer_byte_rate'] = 1024
+        quota_detail_model_json['consumer_byte_rate'] = 1024
+
+        # Construct a model instance of QuotaDetail by calling from_dict on the json representation
+        quota_detail_model = QuotaDetail.from_dict(quota_detail_model_json)
+        assert quota_detail_model != False
+
+        # Construct a model instance of QuotaDetail by calling from_dict on the json representation
+        quota_detail_model_dict = QuotaDetail.from_dict(quota_detail_model_json).__dict__
+        quota_detail_model2 = QuotaDetail(**quota_detail_model_dict)
+
+        # Verify the model instances are equivalent
+        assert quota_detail_model == quota_detail_model2
+
+        # Convert model instance back to dict and verify no loss of data
+        quota_detail_model_json2 = quota_detail_model.to_dict()
+        assert quota_detail_model_json2 == quota_detail_model_json
 # endregion
 ##############################################################################
 # End of Model Tests

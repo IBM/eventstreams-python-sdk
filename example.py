@@ -176,6 +176,81 @@ def replace_mirroring_topic_selection(service,topic_name):
         print("\tError Replacing Mirroring Topics:") 
     # func.End
 
+def list_quotas(service):
+    # Invoke list method.
+    try:
+        response = service.list_quotas()
+
+        if response.status_code == HTTPStatus.OK:
+            if not response.result :
+                print("\tNothing to List")
+                return
+            for quota in response.result["data"]:
+                quota_details = "entity_name: "+ quota["entity_name"]
+                if "producer_byte_rate" in quota:
+                    quota_details += ", producer_byte_rate: "+ str(quota["producer_byte_rate"])
+                if "consumer_byte_rate" in quota:
+                    quota_details += ", consumer_byte_rate: "+ str(quota["consumer_byte_rate"])
+                print("\t"+quota_details)
+    except:
+        print("\tError Listing Quotas")
+    # func.end
+
+def create_quota(service,entity_name):
+    configs = []
+
+    # Invoke create method.
+    try:
+        response = service.create_quota(
+            entity_name=entity_name,
+            producer_byte_rate=1024,
+            consumer_byte_rate=1024
+        )
+        if response.status_code == HTTPStatus.CREATED :  
+            print("\tQuota created: " + entity_name)
+    except:
+        print("\tError Creating Quota: " + entity_name)
+    # func.End
+
+def delete_quota(service,entity_name):
+    # Lets try to delete it.
+    try:
+        response = service.delete_quota(
+            entity_name,
+            )
+        if response.status_code == HTTPStatus.ACCEPTED: 
+            print("\tQuota deleted: "+entity_name)
+    except:
+        print("\tError Deleting Quota: " + entity_name)
+    # func.End
+
+def quota_details(service,entity_name):
+    # Invoke get method.
+    try:
+        response = service.get_quota(
+            entity_name,
+            )
+        if response.status_code == HTTPStatus.OK:  
+            for key, value in response.result.items(): 
+                print("\t" +key + ":" + str(value) )
+    except:
+        print("\tError Getting Quota Details: " + entity_name)
+    # func.End  
+
+def update_quota(service,entity_name):
+    # Invoke update method.
+    try:
+        response = service.update_quota(
+            entity_name,
+            producer_byte_rate=2048,
+            consumer_byte_rate=2048
+        )
+        if response.status_code == HTTPStatus.ACCEPTED:
+            print("\tQuota updated: " + entity_name)
+    except:
+        print("\tError Updating Quota Details: " + entity_name)
+    # func.End
+
 # Start examples.
 print("List Topics")
 list_topics(service)
@@ -211,3 +286,28 @@ delete_topic(service,"test-topic")
 print("List Topics")
 list_topics(service)
 
+# Uncomment these examples if you are running against an Event Streams Enterprise plan instance
+# test_entity_name = "iam-ServiceId-12345678-aaaa-bbbb-cccc-1234567890xy"
+# print("List Quotas")
+# list_quotas(service)
+
+# print("Create Quota")
+# create_quota(service, test_entity_name)
+
+# print("Print Quota Details")
+# quota_details(service, test_entity_name)
+
+# print("List Quotas")
+# list_quotas(service)
+
+# print("Update Quota Details")
+# update_quota(service, test_entity_name)
+
+# print("Print Quota Details")
+# quota_details(service, test_entity_name)
+
+# print("Delete Quota")
+# delete_quota(service, test_entity_name)
+
+# print("List Quotas")
+# list_quotas(service)
