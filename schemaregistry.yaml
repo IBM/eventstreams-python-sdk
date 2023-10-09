@@ -1,0 +1,1080 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+#
+# 5725-U33, 5737-H33
+#
+# (C) Copyright IBM Corp. 2018-2023  All Rights Reserved.
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+###############################################################################
+openapi: 3.0.0
+info:
+  title: IBM Event Streams Schema Registry
+  description: IBM Event Streams schema registry management
+  version: 1.3.0
+  x-alternate-name: schemaregistry
+  x-codegen-config:
+    improvedNameFormattingV2: true
+    go:
+      apiPackage: github.com/IBM/eventstreams-go-sdk
+      improvedNameFormattingV2: true
+servers:
+- url: /
+security:
+- BearerAuth: []
+- BasicAuth: []
+paths:
+  /artifacts:
+    get:
+      tags:
+      - schemas
+      summary: List schema IDs
+      operationId: listSchemas
+      description: Returns an array containing the schema IDs of all of the schemas
+        that are stored in the registry.
+      parameters:
+      - name: jsonformat
+        in: query
+        description: format of the response to be returned, allowed values are 'string' and 'object'.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The list schema IDs request was successful. The response body
+            is a JSON array containing a list of schema IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      tags:
+      - schemas
+      summary: Create a new schema
+      operationId: createSchema
+      description: Create a new schema and populate it with an initial schema version
+        containing the AVRO document in the request body.
+      x-codegen-request-body-name: avroSchema
+      parameters:
+      - name: X-Registry-ArtifactId
+        in: header
+        description: The name to assign to the new schema. This must be unique. If
+          this value is not specified then a UUID is used.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The AVRO schema to use as the first version of this new schema.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/avroSchema'
+        required: true
+      responses:
+        "200":
+          description: The schema was successfully created. Information about the
+            newly created schema is included in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemaMetadata'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "409":
+          description: A schema with the specified schema ID already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}:
+    get:
+      tags:
+      - schemas
+      summary: Get the latest version of a schema
+      operationId: getLatestSchema
+      description: Retrieves the lastest version of the specified schema.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of a schema.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The latest version of the schema was successfully retrieved.
+            This schema version is included in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/avroSchema'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      tags:
+      - schemas
+      summary: Delete a schema
+      operationId: deleteSchema
+      description: Deletes a schema and all of its versions from the schema registry.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema to delete.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: The schema was successfully deleted from the registry.
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      tags:
+       - schemas
+      summary: Update a schema
+      operationId: updateSchema
+      description: Updates a schema
+      x-codegen-request-body-name: avroSchema
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema to update.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The AVRO schema to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/avroSchema'
+        required: true
+      responses:
+        "200":
+          description: The schema was successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemaMetadata'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}/versions:
+    get:
+      tags:
+      - schema versions
+      summary: List the versions of a schema
+      operationId: listVersions
+      description: Returns an array containing the version numbers of all of the versions
+        of the specified schema.
+      parameters:
+      - name: id
+        in: path
+        description: The schema ID for which the list of versions will be returned.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: jsonformat
+        in: query
+        description: format of the response to be returned, allowed values are 'number' and 'object'.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The request to list the versions of a schema was successful.
+            The body of the response contains an array of schema version numbers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  description: Schema version number
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      tags:
+      - schema versions
+      summary: Create a new schema version
+      operationId: createVersion
+      description: Creates a new version of a schema using the AVRO schema supplied
+        in the request body.
+      x-codegen-request-body-name: avroSchema
+      parameters:
+      - name: id
+        in: path
+        description: A schema ID. This identifies the schema for which a new version
+          will be created.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The AVRO schema to use for the new schema version.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/avroSchema'
+        required: true
+      responses:
+        "200":
+          description: The new schema version was successfully created. Information
+            about the newly created schema is returned in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemaMetadata'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "409":
+          description: >
+            Either the schema already has the maximum number of permitted 
+            versions, or creating a new schema version would fail the required compatibility 
+            checks based on existing versions of the schema. Consult the error information 
+            returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}/versions/{version}:
+    get:
+      tags:
+      - schema versions
+      summary: Get a version of the schema
+      operationId: getVersion
+      description: Retrieve a particular version of the schema.
+      parameters:
+      - name: id
+        in: path
+        description: The schema ID identifying which schema to return a version from.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: The version number that identifies the particular schema version
+          to return.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: The AVRO schema corresponding to the requested schema version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/avroSchema'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: >
+            Either the registry does not contain a schema with the specified
+            schema ID, or the schema identified by the schema ID does not contain
+            a version corresponding to the specified version number.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      tags:
+      - schema versions
+      summary: Delete a version of the schema
+      operationId: deleteVersion
+      description: Delete a version of the schema. If this was the only version of
+        the schema then the whole schema will be deleted.
+      parameters:
+      - name: id
+        in: path
+        description: A schema ID that identifies the schema to delete a version from.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: The schema version number to delete.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: The schema version was successfully deleted.
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: >
+            Either the registry does not contain a schema with the specified
+            schema ID, or the schema identified by the schema ID does not contain
+            a version corresponding to the specified version number.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}/state:
+    put:
+      tags:
+       - schema state
+      summary: Set schema state
+      operationId: setSchemaState
+      description: Sets schema state
+      x-codegen-request-body-name: schemaState
+      parameters:
+      - name: id
+        in: path
+        description: The ID of a schema.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: A JSON object representing the schema state to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/states'
+              description: state of schema
+      responses:
+        "204":
+          description: The set schema state request was successful.
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}/versions/{version}/state:
+    put:
+      tags:
+        - schema version state
+      summary: Set schema version state
+      operationId: setSchemaVersionState
+      description: Sets schema version state
+      x-codegen-request-body-name: schemaVersionState
+      parameters:
+      - name: id
+        in: path
+        description: The ID of a schema.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: The version number that identifies the particular schema version
+          to return.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: A JSON object representing the schema version state to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/states'
+              description: state of schema version
+      responses:
+        "204":
+            description: The set schema version state request was successful.
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'  
+  /artifacts/{id}/rules:
+    post:
+      tags:
+      - schema rules
+      summary: Create a schema rule
+      operationId: createSchemaRule
+      description: Create a new rule that controls compatibility checks for a particular
+        schema. Schema rules override the registries global compatibility rule setting.
+      x-codegen-request-body-name: schemaRule
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema that the rule is to be associated with.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: A JSON object representing the schema rule to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rule'
+        required: true
+      responses:
+        "200":
+          description: The schema rule was created successfully. The value of the
+            schema rule is returned in the body of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rule'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The registry does not contain a schema with the specified schema
+            ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "409":
+          description: >
+            A schema rule with the same type already exists for this schema.
+            Use the REST request that specifies the `PUT` verb to a path of 
+            `/artifacts/{id}/rules/{rule}` to update the rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /artifacts/{id}/rules/{rule}:
+    get:
+      tags:
+      - schema rules
+      summary: Get a schema rule configuration
+      operationId: getSchemaRule
+      description: Retrieves the current configuration for a schema rule. If a schema
+        rule exists then it overrides the corresponding global rule that would otherwise
+        be applied.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema to retrieve the rule for.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rule
+        in: path
+        description: The type of rule to retrieve. Currently only the value that can
+          be specified is `COMPATIBILITY`.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - COMPATIBILITY
+      responses:
+        "200":
+          description: The schema rule was successfully retrieved. The value of the
+            schema rule is returned in the body of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rule'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: >
+            Either the registry does not contain a schema with the specified
+            schema ID, or the schema is not configured with the specified type of
+            rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      tags:
+      - schema rules
+      summary: Update the configuration of a schema rule.
+      operationId: updateSchemaRule
+      description: >
+        Updates the configuration of an existing schema rule. The updated
+        rule will be applied to the specified schema, overriding the value set for
+        the corresponding global rule.
+      x-codegen-request-body-name: schemaRule
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema for which to update the rule configuration.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rule
+        in: path
+        description: The type of rule to update. Currently only the value that can
+          be specified is `COMPATIBILITY`.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - COMPATIBILITY
+      requestBody:
+        description: A JSON object representing the updated values to use for the
+          schema rule.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rule'
+        required: true
+      responses:
+        "200":
+          description: The schema rule was successfully retrieved. The value of the
+            schema rule is returned in the body of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rule'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "409":
+          description: >
+            This schema does not have a rule of the specified type. Use
+            the REST request that specifies the `POST` verb to a path of 
+            `/artifacts/{id}/rules` to create a schema rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      tags:
+      - schema rules
+      summary: Delete a schema rule
+      operationId: deleteSchemaRule
+      description: Delete a rule that controls compatibility checks for a particular
+        schema. After this operation completes the schema will be subject to compatibility
+        checking defined by the global compatibility rule setting for the registry.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the schema that the rule is to be deleted from.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rule
+        in: path
+        description: The type of rule to delete. Currently only the value that can
+          be specified is `COMPATIBILITY`.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - COMPATIBILITY
+      responses:
+        "204":
+          description: The schema rule was successfully deleted.
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: >
+            Either the registry does not contain a schema with the specified
+            schema ID, or the schema is not configured with the specified type of
+            rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /rules/{rule}:
+    get:
+      tags:
+      - global rules
+      summary: Retrieve the configuration for a global rule.
+      operationId: getGlobalRule
+      description: Retrieves the configuration for the specified global rule. The
+        value of the global rule is used as the _default_ when a schema does not have
+        a corresponding schema compatibility rule defined.
+      parameters:
+      - name: rule
+        in: path
+        description: The type of the global rule to retrieve. Currently only `COMPATIBILITY`
+          is supported.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - COMPATIBILITY
+      responses:
+        "200":
+          description: The global rule was successfully retrieved. The value of the
+            global rule is returned in the body of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rule'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      tags:
+      - global rules
+      summary: Update the configuration for a global rule
+      operationId: updateGlobalRule
+      description: Update the configuration for the specified global rule. The value
+        of the global rule is used as the _default_ when a schema does not have a
+        corresponding schema compatibility rule defined.
+      x-codegen-request-body-name: globalRule
+      parameters:
+      - name: rule
+        in: path
+        description: The type of the global rule to update. Currently only `COMPATIBILITY`
+          is supported.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - COMPATIBILITY
+      requestBody:
+        description: A JSON object representing the schema rule to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rule'
+      responses:
+        "200":
+          description: The global rule was successfully updated. The new value for
+            the global rule is returned in the body of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rule'
+        "400":
+          description: The request was not valid. Consult the error information returned
+            in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client is not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+components:
+  schemas:
+    avroSchema:
+      example:
+        type: record
+        name: book
+        fields:
+        - name: title
+          type: string
+        - name: author
+          type: string
+      properties:
+        schema:
+          type: object
+          description: The AVRO schema
+    states:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          type: string
+          description: The state of the schema or schema version.
+          allOf:
+          - $ref: '#/components/schemas/allowedStates'
+      description: State define constraints on certain operations on a schema or schema version
+      example:
+        state: DISABLED  
+    allowedStates:
+      type: string
+      description: Valid values for the `state` property to set schema state
+      enum:
+      - ENABLED
+      - DISABLED       
+    rule:
+      required:
+      - config
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of the rule. Currently only one type is supported
+            (`COMPATIBILITY`).
+          enum:
+          - COMPATIBILITY
+        config:
+          description: The configuration value for the rule. Which values are valid
+            depends on the value of this object's `type` property.
+          allOf:
+          - $ref: '#/components/schemas/compatibilityRuleConfig'
+      description: Rules define constraints on whether the schema registry will accept
+        a new version of a schema.
+      example:
+        type: COMPATIBILITY
+        config: BACKWARD
+    compatibilityRuleConfig:
+      type: string
+      description: Valid values for the `config` property of a compatibility rule.
+      enum:
+      - BACKWARD
+      - BACKWARD_TRANSITIVE
+      - FORWARD
+      - FORWARD_TRANSITIVE
+      - FULL
+      - FULL_TRANSITIVE
+      - NONE
+    schemaMetadata:
+      required:
+      - createdOn
+      - globalId
+      - id
+      - modifiedOn
+      - type
+      - version
+      type: object
+      properties:
+        createdOn:
+          type: integer
+          description: Creation timestamp of the schema in UNIX epoc format.
+        globalId:
+          type: integer
+          description: Globally unique ID assigned to the initial version of the schema.
+        id:
+          type: string
+          description: The ID of the schema. This is either taken from the `X-Registry-ArtifactId`
+            header when the request is made to create the schema or is an automatically
+            assigned UUID value.
+        modifiedOn:
+          type: integer
+          description: Last modification timestamp of the schema in UNIX epoc format.
+        type:
+          type: string
+          description: Type of the schema. Always the string `AVRO`.
+        version:
+          type: integer
+          description: Version number assigned to this version of the schema.
+      description: Information about a schema version.
+      example:
+        id: my-schemada
+        type: AVRO
+        version: 1
+        createdOn: 1579267788258
+        modifiedOn: 1579267788258
+        globalId: 75
+    error:
+      required:
+      - error_code
+      - message
+      properties:
+        error_code:
+          type: integer
+          description: HTTP Status code of the response.
+        message:
+          type: string
+          description: Error message.
+        incident:
+          type: string
+          description: Optional incident ID. IBM support can use this to correlate
+            the error response with the underlying cause.
+      example:
+        error_code: 404
+        message: No schema with ID 1234 was found in the registry
+  responses:
+    badRequest:
+      description: The request was not valid. Consult the error information returned
+        in the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    forbidden:
+      description: The client is not authorized to perform this request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    schemaIDNotFound:
+      description: The registry does not contain a schema with the specified schema
+        ID.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    schemaIDOrSchemaRuleNotFound:
+      description: >
+        Either the registry does not contain a schema with the specified
+        schema ID, or the schema is not configured with the specified type of rule.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    schemaIDOrVersionNotFound:
+      description: >
+        Either the registry does not contain a schema with the specified
+        schema ID, or the schema identified by the schema ID does not contain a
+        version corresponding to the specified version number.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    BasicAuth:
+      type: http
+      scheme: basic
