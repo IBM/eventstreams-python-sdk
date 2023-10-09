@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?&branch=main)](https://travis-ci.com/IBM/eventstreams-python-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-# IBM Cloud Event Streams Python SDK Version 1.1.0
+# IBM Cloud Event Streams Python SDK Version 1.3.0
 
 ## Introduction
 
@@ -10,7 +10,7 @@ It is optimized for event ingestion into IBM Cloud and event stream distribution
 Event Streams provides a REST API to help connect your existing systems to your Event Streams Kafka cluster. 
 Using the API, you can integrate Event Streams with any system that supports RESTful APIs.
 
-Documentation [IBM Cloud Eventstreams Service APIs](https://cloud.ibm.com/apidocs/event-streams).
+Documentation [IBM Cloud Event Streams Service APIs](https://cloud.ibm.com/apidocs/event-streams).
 
 ## Table of Contents
 
@@ -41,33 +41,34 @@ Documentation [IBM Cloud Eventstreams Service APIs](https://cloud.ibm.com/apidoc
 
 ## Overview
 
-The IBM Cloud Eventstreams SDK Python SDK allows developers to programmatically interact with the following
+The IBM Cloud Event Streams SDK Python SDK allows developers to programmatically interact with the following
 IBM Cloud services:
 
 Service Name | Imported Class Name
 --- | ---
-[Admin Rest](https://cloud.ibm.com/apidocs/event-streams) | AdminRest
+[Admin Rest](https://cloud.ibm.com/apidocs/event-streams/adminrest) | pkg/adminrestv1
+[Schema Registry](https://cloud.ibm.com/apidocs/event-streams/schemaregistry) | pkg/schemaregistryv1
 
 ## Prerequisites
 
 * An [IBM Cloud](https://cloud.ibm.com/registration) account.
 * The [IBM Cloud CLI.](https://cloud.ibm.com/docs/cli?topic=cli-getting-started)
 * An IAM API key to allow the SDK to access your account. Create one [here](https://cloud.ibm.com/iam/apikeys).
-* A IBM Cloud Eventstreams Instance Create one [here](https://cloud.ibm.com/registration?target=/catalog/services/event-streams)
+* An IBM Cloud Event Streams Instance Create one [here](https://cloud.ibm.com/registration?target=/catalog/services/event-streams)
 * Python 3.6 or above.
 
 ## Installation
 
-To install, use `pip3` or `easy_install3.5`:
+To install, use `pip` or `easy_install3.5`:
 
 ```bash
-pip3 install --upgrade "eventstreams_sdk>=1.1.0"
+pip install --upgrade "eventstreams_sdk>=1.3.0"
 ```
 
 or
 
 ```bash
-easy_install3.5 --upgrade "eventstreams_sdk>=1.1.0"
+easy_install3.5 --upgrade "eventstreams_sdk>=1.3.0"
 ```
 
 ## Using the SDK
@@ -138,7 +139,7 @@ $ibmcloud resource service-key "${service_instance_key_name}" --output json > jq
 ## Environment Setup
 In the examples you must set and export environment variables as follows:
 - Either the `API_KEY` or `BEARER_TOKEN` to use for authentication.
-- `KAFKA_ADMIN_URL` to point to your Eventstreams admin endpoint.
+- `KAFKA_ADMIN_URL` to point to your Event Streams administration endpoint.
 
 In addition, the `Content-type` header has to be set to `application/json`.
 
@@ -635,6 +636,8 @@ def get_list_mirroring_active_topics(service):
         print("\tError Listing Active Mirroring Topics:")  
     # func.End
 ```
+
+
 ### Creating a Kafka quota
 ---
 To create a Kafka quota the admin REST SDK issues a POST request to the /admin/quotas/ENTITYNAME path (where `ENTITYNAME` is the name of the entity that you want to create. The entity name of the quota can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix).
@@ -657,9 +660,6 @@ Expected HTTP status codes:
 
 If the request to create a Kafka quota succeeds then HTTP status code 201 (Created) is returned. If the operation fails then a HTTP status code of 422 (Un-processable Entity) is returned, and a JSON object containing additional information about the failure is returned as the body of the response.
 
-
-
-
 #### Example
 
 ```python
@@ -680,7 +680,6 @@ def create_quota(service,entity_name):
     # func.End
 ```
 
-
 ### Deleting a Kafka quota
 ---
 To delete a Kafka quota, the admin REST SDK issues a DELETE request to the `/admin/quotas/ENTITYNAME`
@@ -691,12 +690,13 @@ Expected return codes:
 - 403: Not authorized to delete quota.
 - 404: Entity Quota does not exist.
 - 422: Semantically invalid request.
-  
+
 A 202 (Accepted) status code is returned if the REST API accepts the delete
 request or status code 422 (Un-processable Entity) if the delete request is
 rejected. If a delete request is rejected then the body of the HTTP response
 will contain a JSON object which provides additional information about why
 the request was rejected.
+
 
 #### Example
 
@@ -756,6 +756,7 @@ following properties:
 | producer_byte_rate| The producer byte rate quota value.            |
 | consumer_byte_rate| The consumer byte rate quota value.            |
 
+
 #### Example
 
 ```python
@@ -809,7 +810,7 @@ def quota_details(service,entity_name):
                 print("\t" +key + ":" + str(value) )
     except:
         print("\tError Getting Quota Details: " + entity_name)
-    # func.End 
+    # func.End  
 ```
 
 ### Updating Kafka quota's information
@@ -830,6 +831,7 @@ Expected status codes
 - 404: Entity quota specified does not exist.
 - 422: Semantically invalid request.
 
+
 #### Example
 
 ```python
@@ -847,3 +849,4 @@ def update_quota(service,entity_name):
         print("\tError Updating Quota Details: " + entity_name)
     # func.End
 ```
+

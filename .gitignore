@@ -48,7 +48,8 @@ coverage.xml
 .vscode
 
 # virtual env
-venv/
+venv*/
+
 # python 3 virtual env
 python3/
 
@@ -73,3 +74,7 @@ test/__init__.py
 .openapi-generator-ignore
 /.pydevproject
 /.settings/
+
+# files produced by "npm install" commands during build
+package-lock.json
+node_modules/
