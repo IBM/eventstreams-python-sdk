@@ -21,6 +21,7 @@ Test methods in the common module
 import unittest
 from eventstreams_sdk import common
 
+
 class TestCommon(unittest.TestCase):
     """
     Test methods in the common module
@@ -30,7 +31,9 @@ class TestCommon(unittest.TestCase):
         """
         Test the get_sdk_headers method
         """
-        headers = common.get_sdk_headers(service_name='example_service', service_version='V1', operation_id='operation1')
+        headers = common.get_sdk_headers(
+            service_name='example_service', service_version='V1', operation_id='operation1'
+        )
         self.assertIsNotNone(headers)
         self.assertIsNotNone(headers.get('User-Agent'))
         self.assertIn('eventstreams-python-sdk', headers.get('User-Agent'))

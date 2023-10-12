@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2019, 2020 IBM All Rights Reserved.
+# Copyright 2019, 2023 IBM All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ PACKAGE_NAME = 'eventstreams_sdk'
 PACKAGE_DESC = 'Event Streams Python SDK'
 
 with open('requirements.txt') as f:
-    install_requires = [
-        str(req) for req in pkg_resources.parse_requirements(f)
-    ]
+    install_requires = [str(req) for req in pkg_resources.parse_requirements(f)]
 with open('requirements-dev.txt') as f:
     tests_require = [str(req) for req in pkg_resources.parse_requirements(f)]
 
@@ -61,10 +59,10 @@ setup(
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
@@ -72,4 +70,5 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
     ],
-    zip_safe=True)
+    zip_safe=True,
+)

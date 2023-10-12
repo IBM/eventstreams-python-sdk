@@ -1,12 +1,14 @@
 LICENSE
 MANIFEST.in
 README.md
+pyproject.toml
 requirements-dev.txt
 requirements.txt
 setup.py
 eventstreams_sdk/__init__.py
 eventstreams_sdk/adminrest_v1.py
 eventstreams_sdk/common.py
+eventstreams_sdk/schemaregistry_v1.py
 eventstreams_sdk/version.py
 eventstreams_sdk.egg-info/PKG-INFO
 eventstreams_sdk.egg-info/SOURCES.txt
