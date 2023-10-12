@@ -1,0 +1,2087 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+#
+# 5725-U33, 5737-H33
+#
+# (C) Copyright IBM Corp. 2018-2023  All Rights Reserved.
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+###############################################################################
+openapi: 3.0.0
+tags:
+ - name: Administration REST API
+info:
+  title: IBM Event Streams Admin REST API
+  description: The administration REST API for IBM Event Streams on Cloud.
+  version: 1.3.0
+  x-alternate-name: adminrest
+  x-codegen-config:
+    improvedNameFormattingV2: true
+    go:
+      apiPackage: github.com/IBM/eventstreams-go-sdk
+      improvedNameFormattingV2: true
+servers:
+  - url: /
+security:
+  - BearerAuth: []
+  - BasicAuth: []
+  - APIKeyAuth: []
+paths:
+#====================================================================================#
+# Admin REST API health check
+#====================================================================================#
+  /alive:
+    get:
+      operationId: alive
+      summary: Basic health check for Admin REST API
+      responses:
+        "200":
+          description: Admin REST API is available.
+
+#====================================================================================#
+# Topic related paths
+#====================================================================================#
+  /admin/topics:
+    post: 
+      tags: 
+        - CreateTopic
+      operationId: CreateTopic
+      summary: Create a new topic.
+      description: Create a new topic.
+      requestBody:
+        description: The details of the topic to be created.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/topic_create_request'
+      responses:   
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "422":
+          description: The request was semantically invalid. Consult the error information returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example create topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_CREATE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example create topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_CREATE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example create topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_CREATE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example create topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_CREATE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example create topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_CREATE_TOPIC_EXAMPLE__"
+    get:
+      operationId: ListTopics
+      summary: Get a list of topics.
+      description: Returns a list containing information about all of the Kafka topics that are defined for an instance of the Event Streams service. If there are currently no topics defined then an empty list is returned.
+      parameters:
+        - name: topic_filter
+          in: query
+          schema: 
+            type: string
+          required: false
+          description: >
+            A filter to be applied to the topic names. A simple filter can be specified as
+            a string with asterisk (`*`) wildcards representing 0 or more characters, e.g.
+            `topic-name*` will filter all topic names that begin with the string `topic-name`
+            followed by any character sequence. A more complex filter pattern can be used
+            by surrounding a regular expression in forward slash (`/`) delimiters, e.g.
+            `/topic-name.* /`.
+        - name: per_page
+          in: query
+          required: false
+          schema: 
+            type: integer
+          description: The number of topic names to be returned.
+        - name: page
+          in: query
+          required: false
+          schema: 
+            type: integer
+          description: The page number to be returned. The number 1 represents the first page. The default value is 1.
+      responses:
+        "200":
+          description: Returns a list of topics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topic_list'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+            X-Total-Count:
+              schema:
+                $ref: '#/components/schemas/header_total_count'
+            Link:
+              schema:
+                $ref: '#/components/schemas/header_link'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example lists topics using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_LIST_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example lists topics using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_LIST_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example lists topics using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_LIST_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example lists topics using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_LIST_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example lists topics using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_LIST_TOPIC_EXAMPLE__" 
+
+  /admin/topics/{topic_name}:
+    get:
+      operationId: GetTopic
+      summary: Get detailed information on a topic.
+      description: Get detailed information on a topic.
+      parameters:
+        - name: topic_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The topic name for the topic to be described.
+      responses:
+        "200":
+          description: Returns a detailed description of a single topic.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topic_detail'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested topic was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get topic details using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_TOPIC_DETAILS_EXAMPLE__"
+          go:
+            - name: "Example get topic details using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_TOPIC_DETAILS_EXAMPLE__" 
+          java:
+            - name: "Example get topic details using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_TOPIC_DETAILS_EXAMPLE__" 
+          python:
+            - name: "Example get topic details using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_TOPIC_DETAILS_EXAMPLE__" 
+          node:
+            - name: "Example get topic details using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_TOPIC_DETAILS_EXAMPLE__"
+
+    delete:
+      operationId: DeleteTopic
+      summary: Delete a topic.
+      description: Delete a topic.
+      parameters:
+        - name: topic_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The topic name for the topic to be deleted.
+      responses:
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested topic was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example delete topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_DELETE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example delete topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_DELETE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example delete topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_DELETE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example delete topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_DELETE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example delete topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_DELETE_TOPIC_EXAMPLE__" 
+
+    patch:
+      operationId: UpdateTopic
+      summary: Increase the number of partitions and/or update one or more topic configuration parameters.
+      description: Increase the number of partitions and/or update one or more topic configuration parameters.  
+      parameters:
+        - name: topic_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The topic name for the topic to be updated.
+      requestBody:
+        description: The details of the topic to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/topic_update_request'
+      responses: 
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404": 
+          description: The requested topic was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "422":
+          description: The request was semantically invalid. Consult the error information returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error' 
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example update topic using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_UPDATE_TOPIC_EXAMPLE__"
+          go:
+            - name: "Example update topic using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_UPDATE_TOPIC_EXAMPLE__" 
+          java:
+            - name: "Example update topic using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_UPDATE_TOPIC_EXAMPLE__" 
+          python:
+            - name: "Example update topic using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_UPDATE_TOPIC_EXAMPLE__" 
+          node:
+            - name: "Example update topic using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_UPDATE_TOPIC_EXAMPLE__" 
+
+  /admin/topics/{topic_name}/records:
+    delete:  
+      operationId: DeleteTopicRecords
+      summary: Delete records before the given offset on a topic.
+      description: Delete records before the given offset on a topic.
+      parameters: 
+        - name: topic_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The topic name of the records to be deleted.
+      requestBody:
+        description: The records in which partition and before which offset to be deleted.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/record_delete_request'
+      responses:
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404": 
+          description: The requested topic or partition or offset was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "422":
+          description: The request was semantically invalid. Consult the error information returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  
+#====================================================================================#
+# Quotas related paths
+#====================================================================================#
+  /admin/quotas/{entity_name}:
+    post:
+      operationId: create_quota
+      summary: Create a new quota.
+      description: Create a new quota.
+      parameters:
+        - name: entity_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
+      requestBody:
+        description: The new quota to be created.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/quota_detail'
+      responses:
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "422":
+          description: The request was semantically invalid. Consult the error information returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example of creating a quota using Curl."
+              example:
+                - type: "code"
+                  source: "__CURL_CREATE_QUOTAS_EXAMPLE__"
+          go:
+            - name: "Example of creating a quota using Go."
+              example:
+                - type: "code"
+                  source: "__GOLANG_CREATE_QUOTAS_EXAMPLE__"
+          java:
+            - name: "Example of creating a quota using Java."
+              example:
+                - type: "code"
+                  source: "__JAVA_CREATE_QUOTAS_EXAMPLE__"
+          python:
+            - name: "Example of creating a quota using Python."
+              example:
+                - type: "code"
+                  source: "__PYTHON_CREATE_QUOTAS_EXAMPLE__"
+          node:
+            - name: "Example of creating a quota using Node."
+              example:
+                - type: "code"
+                  source: "__NODE_CREATE_QUOTAS_EXAMPLE__"
+
+    patch: 
+      operationId: update_quota
+      summary: Update a quota.
+      description: Update an entity's quota.
+      parameters:
+        - name: entity_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
+      requestBody:
+        description: The new quota to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/quota_detail'
+      responses:
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested quota was not found for specified entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "422":
+          description: The request was semantically invalid. Consult the error information returned in the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example of updating a quota using Curl."
+              example:
+                - type: "code"
+                  source: "__CURL_UPDATE_QUOTAS_EXAMPLE__"
+          go:
+            - name: "Example of updating a quota using Go."
+              example:
+                - type: "code"
+                  source: "__GOLANG_UPDATE_QUOTAS_EXAMPLE__"
+          java:
+            - name: "Example of updating a quota using Java."
+              example:
+                - type: "code"
+                  source: "__JAVA_UPDATE_QUOTAS_EXAMPLE__"
+          python:
+            - name: "Example of updating a quota using Python."
+              example:
+                - type: "code"
+                  source: "__PYTHON_UPDATE_QUOTAS_EXAMPLE__"
+          node:
+            - name: "Example of updating a quota using Node."
+              example:
+                - type: "code"
+                  source: "__NODE_UPDATE_QUOTAS_EXAMPLE__"
+
+    delete: 
+      operationId: delete_quota
+      summary: Delete a quota.
+      description: Delete an entity's quota.
+      parameters:
+        - name: entity_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
+      responses:
+        "202":
+          description: The request was accepted.
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested quota was not found for specified entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example of deleting a quota using Curl."
+              example:
+                - type: "code"
+                  source: "__CURL_DELETE_QUOTAS_EXAMPLE__"
+          go:
+            - name: "Example of deleting a quota using Go."
+              example:
+                - type: "code"
+                  source: "__GOLANG_DELETE_QUOTAS_EXAMPLE__"
+          java:
+            - name: "Example of deleting a quota using Java."
+              example:
+                - type: "code"
+                  source: "__JAVA_DELETE_QUOTAS_EXAMPLE__"
+          python:
+            - name: "Example of deleting a quota using Python."
+              example:
+                - type: "code"
+                  source: "__PYTHON_DELETE_QUOTAS_EXAMPLE__"
+          node:
+            - name: "Example of deleting a quota using Node."
+              example:
+                - type: "code"
+                  source: "__NODE_DELETE_QUOTAS_EXAMPLE__"
+
+    get: 
+      operationId: get_quota
+      summary: Get quota information for an entity.
+      description: Get quota information for an entity.
+      parameters:
+        - name: entity_name
+          in: path 
+          schema:
+            type: string 
+          required: true
+          description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
+      responses:
+        "200":
+          description: Returns the quota information for the entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quota_detail'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested entity was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example of getting information about a quota using Curl."
+              example:
+                - type: "code"
+                  source: "__CURL_GET_QUOTAS_EXAMPLE__"
+          go:
+            - name: "Example of getting information about a quota using Go."
+              example:
+                - type: "code"
+                  source: "__GOLANG_GET_QUOTAS_EXAMPLE__"
+          java:
+            - name: "Example of getting information about a quota using Java."
+              example:
+                - type: "code"
+                  source: "__JAVA_GET_QUOTAS_EXAMPLE__"
+          python:
+            - name: "Example of getting information about a quota using Python."
+              example:
+                - type: "code"
+                  source: "__PYTHON_GET_QUOTAS_EXAMPLE__"
+          node:
+            - name: "Example of getting information about a quota using Node."
+              example:
+                - type: "code"
+                  source: "__NODE_GET_QUOTAS_EXAMPLE__"
+
+  /admin/quotas:
+    get: 
+      operationId: list_quotas
+      summary: List each entity's quota information.
+      description: List each entity's quota information.
+      responses:
+        "200":
+          description: Returns a list of entity's quota information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quota_list'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example of listing quotas using Curl."
+              example:
+                - type: "code"
+                  source: "__CURL_LIST_QUOTAS_EXAMPLE__"
+          go:
+            - name: "Example of listing quotas using Go."
+              example:
+                - type: "code"
+                  source: "__GOLANG_LIST_QUOTAS_EXAMPLE__"
+          java:
+            - name: "Example of listing quotas using Java."
+              example:
+                - type: "code"
+                  source: "__JAVA_LIST_QUOTAS_EXAMPLE__"
+          python:
+            - name: "Example of listing quotas using Python."
+              example:
+                - type: "code"
+                  source: "__PYTHON_LIST_QUOTAS_EXAMPLE__"
+          node:
+            - name: "Example of listing quotas using Node."
+              example:
+                - type: "code"
+                  source: "__NODE_LIST_QUOTAS_EXAMPLE__"
+                  
+#================================#
+# Broker related paths
+#================================#
+  /admin/brokers:
+    get:
+      operationId: ListBrokers
+      summary: Get a list of brokers in the cluster.
+      description: Get a list of brokers in the cluster.
+      responses:
+        "200":
+          description: Returns a list of brokers in the cluster.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/broker_summary'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401": 
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  
+  /admin/brokers/{broker_id}:
+    get: 
+      operationId: GetBroker
+      summary: Get detailed information for a single broker.
+      description: Get detailed information for a single broker.
+      parameters:
+        - name: broker_id
+          in: path 
+          schema:
+            type: integer 
+          required: true
+          description: The broker ID of the broker to be described.
+      responses:
+        "200":
+          description: Returns detailed information for a single broker.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broker_detail'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested broker was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  
+  /admin/brokers/{broker_id}/configs:
+    get:
+      operationId: GetBrokerConfig
+      summary: Get all configuration parameters for a single broker.
+      description: Get all configuration parameters for a single broker.
+      parameters:
+        - name: broker_id
+          in: path 
+          schema:
+            type: integer 
+          required: true
+          description: The broker ID of the broker to be described.
+        - name: config_filter
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >
+            A filter to be applied to the config names. A simple filter can be specified as
+            a string with asterisk (`*`) wildcards representing 0 or more characters, e.g.
+            `file*` will filter all config names that begin with the string `file`
+            followed by any character sequence. A more complex filter pattern can be used
+            by surrounding a regular expression in forward slash (`/`) delimiters, e.g.
+            `/file.* /`.
+        - name: verbose
+          in: query
+          schema:
+            type: boolean
+          required: false
+          description: >
+            When true, all information about the config properties is returned including
+            the source of the configuration indicating its scope and whether it's dynamic. 
+      responses:
+        "200":
+          description: Returns the detailed configuration parameters of the broker.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broker_detail'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested broker was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+#================================================#
+# Cluster related paths
+#================================================#
+  /admin/cluster:
+    get:
+      operationId: GetCluster
+      summary: Get information about the cluster.
+      description: Get information about the cluster.
+      responses:
+        "200":
+          description: Returns a description of the cluster and its brokers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cluster'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    
+#=============================================
+# Consumer groups related paths
+#=============================================
+  /admin/consumergroups:
+    get: 
+      operationId: ListConsumerGroups
+      summary: Get a list of consumer group IDs.
+      description: Get a list of consumer group IDs.
+      parameters:
+        - name: group_filter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: >
+            A filter to be applied to the consumer group IDs. A simple filter can be specified as
+            a string with asterisk (`*`) wildcards representing 0 or more characters, e.g.
+            `group_id*` will filter all group IDs that begin with the string `group_id`
+            followed by any character sequence. A more complex filter pattern can be used
+            by surrounding a regular expression in forward slash (`/`) delimiters, e.g.
+            `/group_id.* /`.
+        - name: per_page
+          in: query
+          required: false
+          schema: 
+            type: integer
+          description: The number of consumer groups to be returned.
+        - name: page
+          in: query
+          required: false
+          schema: 
+            type: integer
+          description: The page number to be returned. The number 1 represents the first page. The default value is 1.
+      responses:
+        "200":
+          description: Returns a list of consumer groups.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group_list'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+            X-Total-Count:
+              schema:
+                $ref: '#/components/schemas/header_total_count'
+            Link:
+              schema:
+                $ref: '#/components/schemas/header_link'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /admin/consumergroups/{group_id}:
+    get: 
+      operationId: GetConsumerGroup
+      summary: Get detailed information on a consumer group.
+      description: Get detailed information on a consumer group.
+      parameters: 
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The group ID for the consumer group to be described.
+      responses:
+        "200":
+          description: Returns detailed information of a consumer group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group_detail'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested consumer group was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      operationId: DeleteConsumerGroup
+      summary: Delete a consumer group.
+      description: Delete a consumer group.  
+      parameters: 
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The group ID for the consumer group to be deleted.    
+      responses:
+        "202":
+          description: The request was accepted. 
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested consumer group was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    patch:
+      operationId: UpdateConsumerGroup
+      summary: Update the offsets of a consumer group.
+      description: Update the offsets of a consumer group using various modes, eg. latest, earliest, datetime,etc.
+      parameters: 
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The group ID for the consumer group to be updated. 
+      requestBody:
+        description: The offsets of the consumer group to be reset.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group_reset_request'
+      responses:
+        "200":
+          description: >
+            The result of updating the offsets for the group. When 'execute' is true, 
+            this is the actual state of the group. When 'execute' is false, it is the 
+            projected state as if the operation had been actually performed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group_reset_results'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+            Strict-Transport-Security:
+              schema:
+                $ref: '#/components/schemas/header_transport_security'
+            Cache-Control:
+              schema:
+                $ref: '#/components/schemas/header_cache_control'
+            Pragma: 
+              schema:
+                $ref: '#/components/schemas/header_pragma'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: The requested consumer group was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        
+#================================================#
+# Mirroring related paths
+#================================================#
+  /admin/mirroring/topic-selection:
+    get: 
+      operationId: GetMirroringTopicSelection
+      summary: Get current topic selection for mirroring.
+      description: Get current topic selection for mirroring.
+      responses:
+        "200":
+          description: Returns topic selections as patterns.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mirroring_topic_selection'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get mirroring topic selection using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
+          go:
+            - name: "Example get mirroring topic selection using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          java:
+            - name: "Example get mirroring topic selection using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          python:
+            - name: "Example get mirroring topic selection using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          node:
+            - name: "Example get mirroring topic selection using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+
+    post:
+      operationId: ReplaceMirroringTopicSelection
+      summary: Replace topic selection for mirroring.
+      description: Replace topic selection for mirroring. This operation replaces the complete set of mirroring topic selections.
+      requestBody:
+        description: Topic selection patterns for mirroring.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mirroring_topic_selection'
+      responses:
+        "200":
+          description: Returns new topic selections as patterns.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mirroring_topic_selection'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
+        "400":
+          description: The request body was invalid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "415":
+          description: The header 'Content-Type' must be 'application/json'.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example replace mirroring topic selection using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
+          go:
+            - name: "Example replace mirroring topic selection using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          java:
+            - name: "Example replace mirroring topic selection using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          python:
+            - name: "Example replace mirroring topic selection using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+          node:
+            - name: "Example replace mirroring topic selection using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+  
+  /admin/mirroring/active-topics:
+    get: 
+      operationId: GetMirroringActiveTopics
+      summary: Get topics that are being actively mirrored.
+      description: Get topics that are being actively mirrored.
+      responses:
+        "200":
+          description: Return topics that are being actively mirrored.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mirroring_active_topics'
+        "401":
+          description: The client was not authenticated to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: The client was not authorized to perform this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "503":
+          description: The server was not available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-sdk-operations:
+        request-examples:
+          curl:
+            - name: "Example get mirroring active topics using Curl."
+              example: 
+                - type: "code"
+                  source: "__CURL_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
+          go:
+            - name: "Example get mirroring active topics using Go."
+              example: 
+                - type: "code"
+                  source: "__GOLANG_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+          java:
+            - name: "Example get mirroring active topics using Java."
+              example: 
+                - type: "code"
+                  source: "__JAVA_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+          python:
+            - name: "Example get mirroring active topics using Python."
+              example: 
+                - type: "code"
+                  source: "__PYTHON_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
+          node:
+            - name: "Example get mirroring active topics using Node."
+              example: 
+                - type: "code"
+                  source: "__NODE_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: "This is your IBM Cloud access token. You can retrieve it using the IBM Cloud CLI command: `ibmcloud iam oauth-tokens`."
+      bearerFormat: JWT
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated.
+    APIKeyAuth: 
+      type: apiKey
+      name: X-Auth-Token
+      in: header
+      description: Deprecated.
+
+  schemas:
+    error:
+      required:
+      - error_code
+      - message
+      - incident_id
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: The 3-digits http status code plus 2-digits kafka error code.
+        message:
+          type: string
+          description: The error message.
+        incident_id:
+          type: string
+          description: The incident ID of the error.
+    
+    header_tx_id:
+      type: string
+      description: >
+        The transaction ID of the request for debugging purpose.
+        If the header is set on the request, it will be honored. If not, it will be generated. 
+        In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
+    
+    header_transport_security:
+      type: string 
+      default: max-age=31536000; includeSubDomains
+      description: > 
+        Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
+    
+    header_cache_control:
+      type: string
+      default: no-cache, no-store
+      description: >
+        Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+        And the cache should not store anything about the client request or server response.
+
+    header_pragma:
+      type: string
+      default: no-cache
+      description: >
+        Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+        Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
+    
+    header_total_count:
+      type: integer
+      description: The total number of resources.
+
+    header_link:
+      type: string
+      description: >
+        The client can scroll through pages using the links generated in the Link header.
+        There are 4 links encoded in the header which represent the first, last, next and
+        previous operations. An example header is Link:
+        <http://kafka.admin.host/admin/consumergroups?page=2&per_page=20>; rel="next",
+        <http://kafka.admin.host/admin/consumergroups?page=1&per_page=20>; rel="first",
+        <http://kafka.admin.host/admin/consumergroups?page=5&per_page=20>; rel="last"  
+
+    topic_create_request:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of topic to be created. 
+        partitions:
+          type: integer
+          format: int64
+          description: The number of partitions.
+        partition_count:
+          type: integer
+          format: int64
+          description: The number of partitions, this field takes precedence over 'partitions'. Default value is 1 if not specified.
+          default: 1
+          minimum: 1
+          maximum: 1000
+        configs:
+          type: array
+          description: The config properties to be set for the new topic.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The name of the config property.     
+              value:
+                type: string
+                description: The value for a config property.  
+    
+    topic_list:
+      description:  A list of 'topic_detail' is returned.
+      type: array
+      items:
+        $ref: '#/components/schemas/topic_detail'
+    
+    topic_detail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the topic.
+        partitions:
+          type: integer
+          description: The number of partitions. 
+        replicationFactor:
+          type: integer
+          description: The number of replication factor. 
+        retentionMs:
+          type: integer
+          description: The value of config property 'retention.ms'.
+        cleanupPolicy:
+          type: string
+          description: The value of config property 'cleanup.policy'.
+        configs:
+          $ref: '#/components/schemas/topic_configs'
+        replicaAssignments:
+          type: array
+          description: The replia assignment of the topic.
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: The ID of the partition.
+              brokers:
+                type: object
+                properties:
+                  replicas:
+                    type: array
+                    items:
+                      type: integer
+                      description: The IDs of replicas of the partition.
+    
+    topic_configs:
+      type: object
+      properties:
+        retention.bytes:
+          type: string
+          description: The value of config property 'retention.bytes'.
+        segment.bytes:
+          type: string
+          description: The value of config property 'segment.bytes'.
+        segment.index.bytes:
+          type: string
+          description: The value of config property 'segment.index.bytes'.
+        segment.ms:
+          type: string
+          description: The value of config property 'segment.ms'.
+
+    topic_update_request:
+      description: The new partition number or the configurations to be updated for the topic.
+      type: object
+      properties:
+        new_total_partition_count:
+          type: integer
+          format: int32
+          description: The new partition number to be increased to.
+        configs:
+          type: array
+          description: >
+            The config properties to be updated for the topic.
+            Valid config names are 'cleanup.policy', 'retention.ms', 'retention.bytes', 'segment.bytes', 'segment.ms', 'segment.index.bytes'.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The name of the config property. 
+              value:
+                type: string
+                description: The value of a config property.   
+              reset_to_default:
+                type: boolean
+                description: When true, the value of the config property is reset to its default value.
+
+    record_delete_request:
+      type: object
+      properties:
+        records_to_delete:
+          type: array
+          items:
+            type: object
+            properties:
+              partition:
+                type: integer
+                format: int32
+                description: The number of partitions.
+              before_offset:
+                type: integer
+                format: int64
+                description: The offset number before which records to be deleted. 
+    
+    quota_detail:
+      type: object
+      properties:
+        producer_byte_rate:
+          type: integer
+          format: int64
+          description: The producer byte rate quota value.
+          example:
+            1024
+        consumer_byte_rate:
+          type: integer
+          format: int64
+          description: The consumer byte rate quota value.
+          example:
+            1024
+    
+    quota_list:
+      description:  A list of 'quota_detail' is returned.
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/entity_quota_detail'
+          example:
+          - entity_name: default
+            producer_byte_rate: 1024
+            consumer_byte_rate: 1024
+          - entity_name: iam-ServiceId-38288dac-1f80-46dd-b135-a56153296bcd
+            producer_byte_rate: 1024
+          - entity_name: iam-ServiceId-38288dac-1f80-46dd-b135-e56153296fgh
+            consumer_byte_rate: 2048
+          - entity_name: iam-ServiceId-38288dac-1f80-46dd-b135-f56153296bfa
+            producer_byte_rate: 2048
+            consumer_byte_rate: 1024
+    
+    entity_quota_detail:
+      type: object
+      required:
+        - entity_name
+      properties:
+        entity_name:
+          type: string
+          description: The name of the entity.
+        producer_byte_rate:
+          type: integer
+          format: int64
+          description: The producer byte rate quota value.
+        consumer_byte_rate:
+          type: integer
+          format: int64
+          description: The consumer byte rate quota value.
+
+    broker_summary:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the broker configured in the 'broker.id' broker config property.
+        host:
+          type: string
+          description:  >
+            The hostname that the broker is listening on and which is configured in the 'advertised.listeners' broker
+            config property.
+        port:
+          type: integer
+          description: >
+            The port that the broker is listening on and which is configured in the 'advertised.listeners' broker
+            config property.  
+        rack:
+          type: string
+          description: >
+            The rack of the broker used in rack aware replication assignment for fault tolerance. It is configure
+            in the 'broker.rack' broker config property.
+
+    broker_detail:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the broker configured in the 'broker.id' broker config property.
+        host:
+          type: string
+          description:  >
+            The hostname that the broker is listening on and which is configured in the 'advertised.listeners' broker
+            config property.
+        port:
+          type: integer
+          description: >
+            The port that the broker is listening on and which is configured in the 'advertised.listeners' broker
+            config property.  
+        rack:
+          type: string
+          description: >
+            The rack of the broker used in rack aware replication assignment for fault tolerance. It is configure
+            in the 'broker.rack' broker config property. 
+        configs:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The name of the config property.      
+              value:
+                type: string
+                description: The value for a config property.
+              is_sensitive:
+                type: boolean
+                description: When true, the value cannot be displayed and will be returned with a null value.
+    
+    cluster:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the cluster.
+        controller:
+          $ref: '#/components/schemas/broker_summary'
+        brokers:
+          type: array
+          description: List of brokers in the cluster.
+          items:
+            $ref: '#/components/schemas/broker_summary'
+    
+    group_list:
+      type: array
+      items:
+        type: string
+    
+    group_detail:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: The ID of the consumer group.
+        state:
+          type: string
+          description: THe state of the consumer group.
+        members:
+          type: array
+          description: Members in the consumer group.
+          items:
+            $ref: '#/components/schemas/member'
+        offsets:
+          type: array
+          description: The offsets of the consumer group.
+          items:
+            $ref: '#/components/schemas/topic_partition_offset'
+
+    member:
+      type: object
+      properties:
+        consumer_id:
+          type: string
+          description: The consumer ID of the consumer group member.
+        client_id:
+          type: string
+          description: The client ID of the consumer group member.
+        host:
+          type: string
+          description: The hostname of the machine where the consumer group member is running.
+        assignments:
+          type: array
+          description: The assignments of the group member.
+          items:
+            type: object
+            description: The topic partitions assigned for the consumer group member.
+            properties:
+              topic:
+                type: string
+                description: The name of the topic.
+              partition:
+                type: integer
+                description: The ID of the partition.
+    
+    topic_partition_offset:
+      type: object
+      description: The offsets of a topic partition.
+      properties:
+        topic:
+          type: string
+          description: The name of the topic.
+        partition:
+          type: integer
+          description: The ID of the partition.
+        current_offset:
+          type: integer
+          format: int64
+          description: Current offset of the partition.
+        end_offset:
+          type: integer
+          format: int64
+          description: End offset of the partition.
+    
+    group_reset_request:
+      type: object
+      properties:
+        topic:
+          type: string
+          description: >
+            The name of the topic to be reset. 
+            If missing or blank, the operation applies to all topics read by the consumer group.
+        mode:
+          type: string
+          description: >
+            Mode of shift operation. 
+            Valid values are 'earliest', 'latest', 'datetime'.
+        value:
+          type: string
+          description: >
+            Value for resetting offsets, based on 'mode=datetime', omit for 'earliest' and 'latest'.
+        execute:
+          type: boolean 
+          description:  Whether to execute the operation of resetting the offsets.
+
+    group_reset_results:
+      type: array
+      description: The result after resetting consumer group's offsets.
+      items:
+        type: object
+        description: The new offset for one partition of one topic after resetting consumer group's offset.
+        properties:
+          topic: 
+            type: string
+          partition:
+            type: integer
+          offset:
+            type: integer
+
+    mirroring_topic_selection:
+      type: object
+      description: Mirroring topic selection payload.
+      properties:
+        includes:
+          type: array
+          items:
+            type: string
+            description: Mirroring topic selection pattern.
+    
+    mirroring_active_topics:
+      type: object
+      description: Topics that are being actively mirrored.
+      properties:
+        active_topics:
+          type: array
+          items:
+            type: string
+            description: Active mirroring topic.
