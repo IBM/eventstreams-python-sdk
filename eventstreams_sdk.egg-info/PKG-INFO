@@ -21,13 +21,13 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: ibm_cloud_sdk_core<4.0.0,>=3.17.0
+Requires-Dist: ibm_cloud_sdk_core<4.0.0,>=3.20.4
 
-[![Build Status](https://travis-ci.com/IBM/eventstreams-python-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/IBM/eventstreams-python-sdk)
+[![Build Status](https://v3.travis-ci.com/IBM/eventstreams-python-sdk.svg?token=Z799xXryYYPor3yyJxEs&branch=main)](https://v3.travis.ibm.com/IBM/eventstreams-python-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 # Event Streams Python SDK
 
-Python client library to interact with various [IBM Cloud Event Streams SDK APIs](https://cloud.ibm.com/apidocs?category=eventstreams_sdk).
+Python client library to interact with various [IBM Cloud Event Streams SDK APIs](https://cloud.ibm.com/docs?tab=api-docs?category=eventstreams_sdk).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
 Changes might occur which impact applications that use this SDK.

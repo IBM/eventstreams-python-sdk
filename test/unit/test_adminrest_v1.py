@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) Copyright IBM Corp. 2023.
+# (C) Copyright IBM Corp. 2024.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,23 +44,15 @@ def preprocess_url(operation_path: str):
     The returned request URL is used to register the mock response so it needs
     to match the request URL that is formed by the requests library.
     """
-    # First, unquote the path since it might have some quoted/escaped characters in it
-    # due to how the generator inserts the operation paths into the unit test code.
-    operation_path = urllib.parse.unquote(operation_path)
 
-    # Next, quote the path using urllib so that we approximate what will
-    # happen during request processing.
-    operation_path = urllib.parse.quote(operation_path, safe='/')
-
-    # Finally, form the request URL from the base URL and operation path.
+    # Form the request URL from the base URL and operation path.
     request_url = _base_url + operation_path
 
     # If the request url does NOT end with a /, then just return it as-is.
     # Otherwise, return a regular expression that matches one or more trailing /.
-    if re.fullmatch('.*/+', request_url) is None:
+    if not request_url.endswith('/'):
         return request_url
-    else:
-        return re.compile(request_url.rstrip('/') + '/+')
+    return re.compile(request_url.rstrip('/') + '/+')
 
 
 ##############################################################################
@@ -1772,6 +1764,44 @@ class TestGetMirroringActiveTopics:
         self.test_get_mirroring_active_topics_all_params()
 
 
+class TestGetStatus:
+    """
+    Test Class for get_status
+    """
+
+    @responses.activate
+    def test_get_status_all_params(self):
+        """
+        get_status()
+        """
+        # Set up mock
+        url = preprocess_url('/admin/status')
+        mock_response = '{"status": "available"}'
+        responses.add(
+            responses.GET,
+            url,
+            body=mock_response,
+            content_type='application/json',
+            status=200,
+        )
+
+        # Invoke method
+        response = _service.get_status()
+
+        # Check for correct operation
+        assert len(responses.calls) == 1
+        assert response.status_code == 200
+
+    def test_get_status_all_params_with_retries(self):
+        # Enable retries and run test_get_status_all_params.
+        _service.enable_retries()
+        self.test_get_status_all_params()
+
+        # Disable retries and run test_get_status_all_params.
+        _service.disable_retries()
+        self.test_get_status_all_params()
+
+
 # endregion
 ##############################################################################
 # End of Service: Default
@@ -2234,6 +2264,36 @@ class TestModel_GroupDetail:
         # Convert model instance back to dict and verify no loss of data
         group_detail_model_json2 = group_detail_model.to_dict()
         assert group_detail_model_json2 == group_detail_model_json
+
+
+class TestModel_InstanceStatus:
+    """
+    Test Class for InstanceStatus
+    """
+
+    def test_instance_status_serialization(self):
+        """
+        Test serialization/deserialization for InstanceStatus
+        """
+
+        # Construct a json representation of a InstanceStatus model
+        instance_status_model_json = {}
+        instance_status_model_json['status'] = 'available'
+
+        # Construct a model instance of InstanceStatus by calling from_dict on the json representation
+        instance_status_model = InstanceStatus.from_dict(instance_status_model_json)
+        assert instance_status_model != False
+
+        # Construct a model instance of InstanceStatus by calling from_dict on the json representation
+        instance_status_model_dict = InstanceStatus.from_dict(instance_status_model_json).__dict__
+        instance_status_model2 = InstanceStatus(**instance_status_model_dict)
+
+        # Verify the model instances are equivalent
+        assert instance_status_model == instance_status_model2
+
+        # Convert model instance back to dict and verify no loss of data
+        instance_status_model_json2 = instance_status_model.to_dict()
+        assert instance_status_model_json2 == instance_status_model_json
 
 
 class TestModel_Member:
