@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# (C) Copyright IBM Corp. 2023.
+# (C) Copyright IBM Corp. 2024.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
+# IBM OpenAPI SDK Code Generator Version: 3.93.0-c40121e6-20240729-182103
 
 """
 IBM Event Streams schema registry management
 
-API Version: 1.3.0
+API Version: 1.4.1
 """
 
 from enum import Enum
-from typing import Dict
+from typing import Dict, Optional
 import json
 
 from ibm_cloud_sdk_core import BaseService, DetailedResponse
@@ -559,7 +559,7 @@ class SchemaregistryV1(BaseService):
         self,
         id: str,
         *,
-        jsonformat: str = None,
+        jsonformat: Optional[str] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -614,7 +614,7 @@ class SchemaregistryV1(BaseService):
         self,
         id: str,
         *,
-        schema: dict = None,
+        schema: Optional[dict] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -773,7 +773,7 @@ class SchemaregistryV1(BaseService):
     def list_schemas(
         self,
         *,
-        jsonformat: str = None,
+        jsonformat: Optional[str] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -820,8 +820,8 @@ class SchemaregistryV1(BaseService):
     def create_schema(
         self,
         *,
-        schema: dict = None,
-        x_registry_artifact_id: str = None,
+        schema: Optional[dict] = None,
+        x_registry_artifact_id: Optional[str] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -963,7 +963,7 @@ class SchemaregistryV1(BaseService):
         self,
         id: str,
         *,
-        schema: dict = None,
+        schema: Optional[dict] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -1094,13 +1094,13 @@ class AvroSchema:
     """
     AvroSchema.
 
-    :attr dict schema: (optional) The AVRO schema.
+    :param dict schema: (optional) The AVRO schema.
     """
 
     def __init__(
         self,
         *,
-        schema: dict = None,
+        schema: Optional[dict] = None,
     ) -> None:
         """
         Initialize a AvroSchema object.
@@ -1113,8 +1113,8 @@ class AvroSchema:
     def from_dict(cls, _dict: Dict) -> 'AvroSchema':
         """Initialize a AvroSchema object from a json dictionary."""
         args = {}
-        if 'schema' in _dict:
-            args['schema'] = _dict.get('schema')
+        if (schema := _dict.get('schema')) is not None:
+            args['schema'] = schema
         return cls(**args)
 
     @classmethod
@@ -1153,9 +1153,9 @@ class Rule:
     Rules define constraints on whether the schema registry will accept a new version of a
     schema.
 
-    :attr str type: The type of the rule. Currently only one type is supported
+    :param str type: The type of the rule. Currently only one type is supported
           (`COMPATIBILITY`).
-    :attr str config: The configuration value for the rule. Which values are valid
+    :param str config: The configuration value for the rule. Which values are valid
           depends on the value of this object's `type` property.
     """
 
@@ -1179,12 +1179,12 @@ class Rule:
     def from_dict(cls, _dict: Dict) -> 'Rule':
         """Initialize a Rule object from a json dictionary."""
         args = {}
-        if 'type' in _dict:
-            args['type'] = _dict.get('type')
+        if (type := _dict.get('type')) is not None:
+            args['type'] = type
         else:
             raise ValueError('Required property \'type\' not present in Rule JSON')
-        if 'config' in _dict:
-            args['config'] = _dict.get('config')
+        if (config := _dict.get('config')) is not None:
+            args['config'] = config
         else:
             raise ValueError('Required property \'config\' not present in Rule JSON')
         return cls(**args)
@@ -1249,16 +1249,16 @@ class SchemaMetadata:
     """
     Information about a schema version.
 
-    :attr int created_on: Creation timestamp of the schema in UNIX epoc format.
-    :attr int global_id: Globally unique ID assigned to the initial version of the
+    :param int created_on: Creation timestamp of the schema in UNIX epoc format.
+    :param int global_id: Globally unique ID assigned to the initial version of the
           schema.
-    :attr str id: The ID of the schema. This is either taken from the
+    :param str id: The ID of the schema. This is either taken from the
           `X-Registry-ArtifactId` header when the request is made to create the schema or
           is an automatically assigned UUID value.
-    :attr int modified_on: Last modification timestamp of the schema in UNIX epoc
+    :param int modified_on: Last modification timestamp of the schema in UNIX epoc
           format.
-    :attr str type: Type of the schema. Always the string `AVRO`.
-    :attr int version: Version number assigned to this version of the schema.
+    :param str type: Type of the schema. Always the string `AVRO`.
+    :param int version: Version number assigned to this version of the schema.
     """
 
     def __init__(
@@ -1296,28 +1296,28 @@ class SchemaMetadata:
     def from_dict(cls, _dict: Dict) -> 'SchemaMetadata':
         """Initialize a SchemaMetadata object from a json dictionary."""
         args = {}
-        if 'createdOn' in _dict:
-            args['created_on'] = _dict.get('createdOn')
+        if (created_on := _dict.get('createdOn')) is not None:
+            args['created_on'] = created_on
         else:
             raise ValueError('Required property \'createdOn\' not present in SchemaMetadata JSON')
-        if 'globalId' in _dict:
-            args['global_id'] = _dict.get('globalId')
+        if (global_id := _dict.get('globalId')) is not None:
+            args['global_id'] = global_id
         else:
             raise ValueError('Required property \'globalId\' not present in SchemaMetadata JSON')
-        if 'id' in _dict:
-            args['id'] = _dict.get('id')
+        if (id := _dict.get('id')) is not None:
+            args['id'] = id
         else:
             raise ValueError('Required property \'id\' not present in SchemaMetadata JSON')
-        if 'modifiedOn' in _dict:
-            args['modified_on'] = _dict.get('modifiedOn')
+        if (modified_on := _dict.get('modifiedOn')) is not None:
+            args['modified_on'] = modified_on
         else:
             raise ValueError('Required property \'modifiedOn\' not present in SchemaMetadata JSON')
-        if 'type' in _dict:
-            args['type'] = _dict.get('type')
+        if (type := _dict.get('type')) is not None:
+            args['type'] = type
         else:
             raise ValueError('Required property \'type\' not present in SchemaMetadata JSON')
-        if 'version' in _dict:
-            args['version'] = _dict.get('version')
+        if (version := _dict.get('version')) is not None:
+            args['version'] = version
         else:
             raise ValueError('Required property \'version\' not present in SchemaMetadata JSON')
         return cls(**args)
