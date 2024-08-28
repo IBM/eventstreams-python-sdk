@@ -1626,7 +1626,25 @@ paths:
               example: 
                 - type: "code"
                   source: "__NODE_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
-
+#================================================#
+# Status related paths
+#================================================#
+  /admin/status:
+    get:
+      operationId: GetStatus
+      summary: Get the status of the instance.
+      description: Get the status of the instance.
+      responses:
+        "200":
+          description: Returns the status of the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/instance_status'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
 components:
   securitySchemes:
     BearerAuth:
@@ -2085,3 +2103,17 @@ components:
           items:
             type: string
             description: Active mirroring topic.
+
+    instance_status:
+      type: object
+      description: Information about the status of the instance
+      properties:
+        status:
+          type: string
+          enum: [available, degraded, offline, unknown]
+          description: >
+            The status of the instance:
+            * `available` - the instance is functioning as expected
+            * `degraded` - the instance is in a degraded state, some operations may not complete successfully
+            * `offline` - the instance is offline, all operations attempted against the instance will fail
+            * `unknown` - the state of the instance is not known at this time

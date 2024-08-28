@@ -19,12 +19,14 @@ import os
 import sys
 import pkg_resources
 
-__version__ = '0.0.1'
+__version__ = '1.3.0'
 PACKAGE_NAME = 'eventstreams_sdk'
 PACKAGE_DESC = 'Event Streams Python SDK'
 
 with open('requirements.txt') as f:
-    install_requires = [str(req) for req in pkg_resources.parse_requirements(f)]
+    install_requires = [
+        str(req) for req in pkg_resources.parse_requirements(f)
+    ]
 with open('requirements-dev.txt') as f:
     tests_require = [str(req) for req in pkg_resources.parse_requirements(f)]
 
@@ -42,7 +44,7 @@ with open("README.md", "r") as fh:
     readme = fh.read()
 
 setup(
-    name=PACKAGE_NAME.replace('_', '-'),
+    name=PACKAGE_NAME,
     version=__version__,
     description=PACKAGE_DESC,
     license='Apache 2.0',
@@ -70,5 +72,4 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
     ],
-    zip_safe=True,
-)
+    zip_safe=True)
