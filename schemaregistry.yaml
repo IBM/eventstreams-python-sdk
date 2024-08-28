@@ -13,7 +13,7 @@ openapi: 3.0.0
 info:
   title: IBM Event Streams Schema Registry
   description: IBM Event Streams schema registry management
-  version: 1.3.0
+  version: 1.4.1
   x-alternate-name: schemaregistry
   x-codegen-config:
     improvedNameFormattingV2: true
