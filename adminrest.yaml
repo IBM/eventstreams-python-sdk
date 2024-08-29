@@ -15,7 +15,7 @@ tags:
 info:
   title: IBM Event Streams Admin REST API
   description: The administration REST API for IBM Event Streams on Cloud.
-  version: 1.3.0
+  version: 1.3.1
   x-alternate-name: adminrest
   x-codegen-config:
     improvedNameFormattingV2: true
@@ -44,8 +44,8 @@ paths:
 # Topic related paths
 #====================================================================================#
   /admin/topics:
-    post: 
-      tags: 
+    post:
+      tags:
         - CreateTopic
       operationId: CreateTopic
       summary: Create a new topic.
@@ -57,7 +57,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/topic_create_request'
-      responses:   
+      responses:
         "202":
           description: The request was accepted.
           headers:
@@ -70,7 +70,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -107,27 +107,27 @@ paths:
         request-examples:
           curl:
             - name: "Example create topic using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_CREATE_TOPIC_EXAMPLE__"
           go:
             - name: "Example create topic using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_CREATE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_CREATE_TOPIC_EXAMPLE__"
           java:
             - name: "Example create topic using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_CREATE_TOPIC_EXAMPLE__" 
+                  source: "__JAVA_CREATE_TOPIC_EXAMPLE__"
           python:
             - name: "Example create topic using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_CREATE_TOPIC_EXAMPLE__" 
+                  source: "__PYTHON_CREATE_TOPIC_EXAMPLE__"
           node:
             - name: "Example create topic using Node."
-              example: 
+              example:
                 - type: "code"
                   source: "__NODE_CREATE_TOPIC_EXAMPLE__"
     get:
@@ -137,7 +137,7 @@ paths:
       parameters:
         - name: topic_filter
           in: query
-          schema: 
+          schema:
             type: string
           required: false
           description: >
@@ -150,13 +150,13 @@ paths:
         - name: per_page
           in: query
           required: false
-          schema: 
+          schema:
             type: integer
           description: The number of topic names to be returned.
         - name: page
           in: query
           required: false
-          schema: 
+          schema:
             type: integer
           description: The page number to be returned. The number 1 represents the first page. The default value is 1.
       responses:
@@ -176,7 +176,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
             X-Total-Count:
@@ -201,29 +201,29 @@ paths:
         request-examples:
           curl:
             - name: "Example lists topics using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_LIST_TOPIC_EXAMPLE__"
           go:
             - name: "Example lists topics using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_LIST_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_LIST_TOPIC_EXAMPLE__"
           java:
             - name: "Example lists topics using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_LIST_TOPIC_EXAMPLE__" 
+                  source: "__JAVA_LIST_TOPIC_EXAMPLE__"
           python:
             - name: "Example lists topics using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_LIST_TOPIC_EXAMPLE__" 
+                  source: "__PYTHON_LIST_TOPIC_EXAMPLE__"
           node:
             - name: "Example lists topics using Node."
-              example: 
+              example:
                 - type: "code"
-                  source: "__NODE_LIST_TOPIC_EXAMPLE__" 
+                  source: "__NODE_LIST_TOPIC_EXAMPLE__"
 
   /admin/topics/{topic_name}:
     get:
@@ -232,9 +232,9 @@ paths:
       description: Get detailed information on a topic.
       parameters:
         - name: topic_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The topic name for the topic to be described.
       responses:
@@ -254,7 +254,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -279,27 +279,27 @@ paths:
         request-examples:
           curl:
             - name: "Example get topic details using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_TOPIC_DETAILS_EXAMPLE__"
           go:
             - name: "Example get topic details using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_TOPIC_DETAILS_EXAMPLE__" 
+                  source: "__GOLANG_TOPIC_DETAILS_EXAMPLE__"
           java:
             - name: "Example get topic details using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_TOPIC_DETAILS_EXAMPLE__" 
+                  source: "__JAVA_TOPIC_DETAILS_EXAMPLE__"
           python:
             - name: "Example get topic details using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_TOPIC_DETAILS_EXAMPLE__" 
+                  source: "__PYTHON_TOPIC_DETAILS_EXAMPLE__"
           node:
             - name: "Example get topic details using Node."
-              example: 
+              example:
                 - type: "code"
                   source: "__NODE_TOPIC_DETAILS_EXAMPLE__"
 
@@ -309,9 +309,9 @@ paths:
       description: Delete a topic.
       parameters:
         - name: topic_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The topic name for the topic to be deleted.
       responses:
@@ -327,7 +327,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -358,39 +358,39 @@ paths:
         request-examples:
           curl:
             - name: "Example delete topic using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_DELETE_TOPIC_EXAMPLE__"
           go:
             - name: "Example delete topic using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_DELETE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_DELETE_TOPIC_EXAMPLE__"
           java:
             - name: "Example delete topic using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_DELETE_TOPIC_EXAMPLE__" 
+                  source: "__JAVA_DELETE_TOPIC_EXAMPLE__"
           python:
             - name: "Example delete topic using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_DELETE_TOPIC_EXAMPLE__" 
+                  source: "__PYTHON_DELETE_TOPIC_EXAMPLE__"
           node:
             - name: "Example delete topic using Node."
-              example: 
+              example:
                 - type: "code"
-                  source: "__NODE_DELETE_TOPIC_EXAMPLE__" 
+                  source: "__NODE_DELETE_TOPIC_EXAMPLE__"
 
     patch:
       operationId: UpdateTopic
       summary: Increase the number of partitions and/or update one or more topic configuration parameters.
-      description: Increase the number of partitions and/or update one or more topic configuration parameters.  
+      description: Increase the number of partitions and/or update one or more topic configuration parameters.
       parameters:
         - name: topic_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The topic name for the topic to be updated.
       requestBody:
@@ -400,7 +400,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/topic_update_request'
-      responses: 
+      responses:
         "202":
           description: The request was accepted.
           headers:
@@ -413,7 +413,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -434,7 +434,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-        "404": 
+        "404":
           description: The requested topic was not found.
           content:
             application/json:
@@ -451,45 +451,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error' 
+                $ref: '#/components/schemas/error'
       x-sdk-operations:
         request-examples:
           curl:
             - name: "Example update topic using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_UPDATE_TOPIC_EXAMPLE__"
           go:
             - name: "Example update topic using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_UPDATE_TOPIC_EXAMPLE__" 
+                  source: "__GOLANG_UPDATE_TOPIC_EXAMPLE__"
           java:
             - name: "Example update topic using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_UPDATE_TOPIC_EXAMPLE__" 
+                  source: "__JAVA_UPDATE_TOPIC_EXAMPLE__"
           python:
             - name: "Example update topic using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_UPDATE_TOPIC_EXAMPLE__" 
+                  source: "__PYTHON_UPDATE_TOPIC_EXAMPLE__"
           node:
             - name: "Example update topic using Node."
-              example: 
+              example:
                 - type: "code"
-                  source: "__NODE_UPDATE_TOPIC_EXAMPLE__" 
+                  source: "__NODE_UPDATE_TOPIC_EXAMPLE__"
 
   /admin/topics/{topic_name}/records:
-    delete:  
+    delete:
       operationId: DeleteTopicRecords
       summary: Delete records before the given offset on a topic.
       description: Delete records before the given offset on a topic.
-      parameters: 
+      parameters:
         - name: topic_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The topic name of the records to be deleted.
       requestBody:
@@ -512,7 +512,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -533,7 +533,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-        "404": 
+        "404":
           description: The requested topic or partition or offset was not found.
           content:
             application/json:
@@ -551,7 +551,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  
+
 #====================================================================================#
 # Quotas related paths
 #====================================================================================#
@@ -562,9 +562,9 @@ paths:
       description: Create a new quota.
       parameters:
         - name: entity_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
       requestBody:
@@ -587,7 +587,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -648,15 +648,15 @@ paths:
                 - type: "code"
                   source: "__NODE_CREATE_QUOTAS_EXAMPLE__"
 
-    patch: 
+    patch:
       operationId: update_quota
       summary: Update a quota.
       description: Update an entity's quota.
       parameters:
         - name: entity_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
       requestBody:
@@ -679,7 +679,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -746,15 +746,15 @@ paths:
                 - type: "code"
                   source: "__NODE_UPDATE_QUOTAS_EXAMPLE__"
 
-    delete: 
+    delete:
       operationId: delete_quota
       summary: Delete a quota.
       description: Delete an entity's quota.
       parameters:
         - name: entity_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
       responses:
@@ -770,7 +770,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -825,15 +825,15 @@ paths:
                 - type: "code"
                   source: "__NODE_DELETE_QUOTAS_EXAMPLE__"
 
-    get: 
+    get:
       operationId: get_quota
       summary: Get quota information for an entity.
       description: Get quota information for an entity.
       parameters:
         - name: entity_name
-          in: path 
+          in: path
           schema:
-            type: string 
+            type: string
           required: true
           description: The entity name of the quotas can be `default` or an IAM Service ID that starts with an `iam-ServiceId` prefix.
       responses:
@@ -853,7 +853,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -909,7 +909,7 @@ paths:
                   source: "__NODE_GET_QUOTAS_EXAMPLE__"
 
   /admin/quotas:
-    get: 
+    get:
       operationId: list_quotas
       summary: List each entity's quota information.
       description: List each entity's quota information.
@@ -930,7 +930,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -978,7 +978,7 @@ paths:
               example:
                 - type: "code"
                   source: "__NODE_LIST_QUOTAS_EXAMPLE__"
-                  
+
 #================================#
 # Broker related paths
 #================================#
@@ -1006,10 +1006,10 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
-        "401": 
+        "401":
           description: The client was not authenticated to perform this request.
           content:
             application/json:
@@ -1021,17 +1021,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  
+
   /admin/brokers/{broker_id}:
-    get: 
+    get:
       operationId: GetBroker
       summary: Get detailed information for a single broker.
       description: Get detailed information for a single broker.
       parameters:
         - name: broker_id
-          in: path 
+          in: path
           schema:
-            type: integer 
+            type: integer
           required: true
           description: The broker ID of the broker to be described.
       responses:
@@ -1051,7 +1051,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -1072,7 +1072,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  
+
   /admin/brokers/{broker_id}/configs:
     get:
       operationId: GetBrokerConfig
@@ -1080,9 +1080,9 @@ paths:
       description: Get all configuration parameters for a single broker.
       parameters:
         - name: broker_id
-          in: path 
+          in: path
           schema:
-            type: integer 
+            type: integer
           required: true
           description: The broker ID of the broker to be described.
         - name: config_filter
@@ -1104,7 +1104,7 @@ paths:
           required: false
           description: >
             When true, all information about the config properties is returned including
-            the source of the configuration indicating its scope and whether it's dynamic. 
+            the source of the configuration indicating its scope and whether it's dynamic.
       responses:
         "200":
           description: Returns the detailed configuration parameters of the broker.
@@ -1122,7 +1122,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -1169,7 +1169,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -1184,12 +1184,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-    
+
 #=============================================
 # Consumer groups related paths
 #=============================================
   /admin/consumergroups:
-    get: 
+    get:
       operationId: ListConsumerGroups
       summary: Get a list of consumer group IDs.
       description: Get a list of consumer group IDs.
@@ -1209,13 +1209,13 @@ paths:
         - name: per_page
           in: query
           required: false
-          schema: 
+          schema:
             type: integer
           description: The number of consumer groups to be returned.
         - name: page
           in: query
           required: false
-          schema: 
+          schema:
             type: integer
           description: The page number to be returned. The number 1 represents the first page. The default value is 1.
       responses:
@@ -1235,7 +1235,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
             X-Total-Count:
@@ -1258,11 +1258,11 @@ paths:
                 $ref: '#/components/schemas/error'
 
   /admin/consumergroups/{group_id}:
-    get: 
+    get:
       operationId: GetConsumerGroup
       summary: Get detailed information on a consumer group.
       description: Get detailed information on a consumer group.
-      parameters: 
+      parameters:
         - name: group_id
           in: path
           required: true
@@ -1286,7 +1286,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -1310,17 +1310,17 @@ paths:
     delete:
       operationId: DeleteConsumerGroup
       summary: Delete a consumer group.
-      description: Delete a consumer group.  
-      parameters: 
+      description: Delete a consumer group.
+      parameters:
         - name: group_id
           in: path
           required: true
           schema:
             type: string
-          description: The group ID for the consumer group to be deleted.    
+          description: The group ID for the consumer group to be deleted.
       responses:
         "202":
-          description: The request was accepted. 
+          description: The request was accepted.
           headers:
             X-Global-Transaction-Id:
               schema:
@@ -1331,7 +1331,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "401":
@@ -1362,13 +1362,13 @@ paths:
       operationId: UpdateConsumerGroup
       summary: Update the offsets of a consumer group.
       description: Update the offsets of a consumer group using various modes, eg. latest, earliest, datetime,etc.
-      parameters: 
+      parameters:
         - name: group_id
           in: path
           required: true
           schema:
             type: string
-          description: The group ID for the consumer group to be updated. 
+          description: The group ID for the consumer group to be updated.
       requestBody:
         description: The offsets of the consumer group to be reset.
         required: true
@@ -1379,8 +1379,8 @@ paths:
       responses:
         "200":
           description: >
-            The result of updating the offsets for the group. When 'execute' is true, 
-            this is the actual state of the group. When 'execute' is false, it is the 
+            The result of updating the offsets for the group. When 'execute' is true,
+            this is the actual state of the group. When 'execute' is false, it is the
             projected state as if the operation had been actually performed.
           content:
             application/json:
@@ -1396,7 +1396,7 @@ paths:
             Cache-Control:
               schema:
                 $ref: '#/components/schemas/header_cache_control'
-            Pragma: 
+            Pragma:
               schema:
                 $ref: '#/components/schemas/header_pragma'
         "400":
@@ -1423,12 +1423,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-        
+
 #================================================#
 # Mirroring related paths
 #================================================#
   /admin/mirroring/topic-selection:
-    get: 
+    get:
       operationId: GetMirroringTopicSelection
       summary: Get current topic selection for mirroring.
       description: Get current topic selection for mirroring.
@@ -1465,29 +1465,29 @@ paths:
         request-examples:
           curl:
             - name: "Example get mirroring topic selection using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           go:
             - name: "Example get mirroring topic selection using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__GOLANG_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           java:
             - name: "Example get mirroring topic selection using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__JAVA_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           python:
             - name: "Example get mirroring topic selection using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__PYTHON_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           node:
             - name: "Example get mirroring topic selection using Node."
-              example: 
+              example:
                 - type: "code"
-                  source: "__NODE_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__NODE_GET_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
 
     post:
       operationId: ReplaceMirroringTopicSelection
@@ -1545,32 +1545,32 @@ paths:
         request-examples:
           curl:
             - name: "Example replace mirroring topic selection using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           go:
             - name: "Example replace mirroring topic selection using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__GOLANG_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           java:
             - name: "Example replace mirroring topic selection using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__JAVA_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           python:
             - name: "Example replace mirroring topic selection using Python."
-              example: 
+              example:
                 - type: "code"
-                  source: "__PYTHON_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
+                  source: "__PYTHON_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
           node:
             - name: "Example replace mirroring topic selection using Node."
-              example: 
+              example:
                 - type: "code"
-                  source: "__NODE_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__" 
-  
+                  source: "__NODE_REPLACE_MIRRORING_TOPIC_SELECTION_EXAMPLE__"
+
   /admin/mirroring/active-topics:
-    get: 
+    get:
       operationId: GetMirroringActiveTopics
       summary: Get topics that are being actively mirrored.
       description: Get topics that are being actively mirrored.
@@ -1603,30 +1603,48 @@ paths:
         request-examples:
           curl:
             - name: "Example get mirroring active topics using Curl."
-              example: 
+              example:
                 - type: "code"
                   source: "__CURL_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
           go:
             - name: "Example get mirroring active topics using Go."
-              example: 
+              example:
                 - type: "code"
-                  source: "__GOLANG_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+                  source: "__GOLANG_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
           java:
             - name: "Example get mirroring active topics using Java."
-              example: 
+              example:
                 - type: "code"
-                  source: "__JAVA_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__" 
+                  source: "__JAVA_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
           python:
             - name: "Example get mirroring active topics using Python."
-              example: 
+              example:
                 - type: "code"
                   source: "__PYTHON_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
           node:
             - name: "Example get mirroring active topics using Node."
-              example: 
+              example:
                 - type: "code"
                   source: "__NODE_GET_MIRRORING_ACTIVE_TOPICS_EXAMPLE__"
-
+#================================================#
+# Status related paths
+#================================================#
+  /admin/status:
+    get:
+      operationId: GetStatus
+      summary: Get the status of the instance.
+      description: Get the status of the instance.
+      responses:
+        "200":
+          description: Returns the status of the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/instance_status'
+          headers:
+            X-Global-Transaction-Id:
+              schema:
+                $ref: '#/components/schemas/header_tx_id'
 components:
   securitySchemes:
     BearerAuth:
@@ -1638,7 +1656,7 @@ components:
       type: http
       scheme: basic
       description: Deprecated.
-    APIKeyAuth: 
+    APIKeyAuth:
       type: apiKey
       name: X-Auth-Token
       in: header
@@ -1661,20 +1679,20 @@ components:
         incident_id:
           type: string
           description: The incident ID of the error.
-    
+
     header_tx_id:
       type: string
       description: >
         The transaction ID of the request for debugging purpose.
-        If the header is set on the request, it will be honored. If not, it will be generated. 
+        If the header is set on the request, it will be honored. If not, it will be generated.
         In the event of a non-200 error return code, the transaction ID is also returned in the JSON error response as 'incident_id'.
-    
+
     header_transport_security:
-      type: string 
+      type: string
       default: max-age=31536000; includeSubDomains
-      description: > 
+      description: >
         Specifies a period of time during which the user agent should only access the server using secure HTTPS connections.
-    
+
     header_cache_control:
       type: string
       default: no-cache, no-store
@@ -1688,7 +1706,7 @@ components:
       description: >
         Forces caches to submit the request to the origin server for validation before releasing a cached copy.
         Same as 'Cache-Control: no-cache'. It is used for backwards compatibility with HTTP/1.0.
-    
+
     header_total_count:
       type: integer
       description: The total number of resources.
@@ -1701,14 +1719,14 @@ components:
         previous operations. An example header is Link:
         <http://kafka.admin.host/admin/consumergroups?page=2&per_page=20>; rel="next",
         <http://kafka.admin.host/admin/consumergroups?page=1&per_page=20>; rel="first",
-        <http://kafka.admin.host/admin/consumergroups?page=5&per_page=20>; rel="last"  
+        <http://kafka.admin.host/admin/consumergroups?page=5&per_page=20>; rel="last"
 
     topic_create_request:
       type: object
       properties:
         name:
           type: string
-          description: The name of topic to be created. 
+          description: The name of topic to be created.
         partitions:
           type: integer
           format: int64
@@ -1728,17 +1746,17 @@ components:
             properties:
               name:
                 type: string
-                description: The name of the config property.     
+                description: The name of the config property.
               value:
                 type: string
-                description: The value for a config property.  
-    
+                description: The value for a config property.
+
     topic_list:
       description:  A list of 'topic_detail' is returned.
       type: array
       items:
         $ref: '#/components/schemas/topic_detail'
-    
+
     topic_detail:
       type: object
       properties:
@@ -1747,10 +1765,10 @@ components:
           description: The name of the topic.
         partitions:
           type: integer
-          description: The number of partitions. 
+          description: The number of partitions.
         replicationFactor:
           type: integer
-          description: The number of replication factor. 
+          description: The number of replication factor.
         retentionMs:
           type: integer
           description: The value of config property 'retention.ms'.
@@ -1776,7 +1794,7 @@ components:
                     items:
                       type: integer
                       description: The IDs of replicas of the partition.
-    
+
     topic_configs:
       type: object
       properties:
@@ -1811,10 +1829,10 @@ components:
             properties:
               name:
                 type: string
-                description: The name of the config property. 
+                description: The name of the config property.
               value:
                 type: string
-                description: The value of a config property.   
+                description: The value of a config property.
               reset_to_default:
                 type: boolean
                 description: When true, the value of the config property is reset to its default value.
@@ -1834,8 +1852,8 @@ components:
               before_offset:
                 type: integer
                 format: int64
-                description: The offset number before which records to be deleted. 
-    
+                description: The offset number before which records to be deleted.
+
     quota_detail:
       type: object
       properties:
@@ -1851,7 +1869,7 @@ components:
           description: The consumer byte rate quota value.
           example:
             1024
-    
+
     quota_list:
       description:  A list of 'quota_detail' is returned.
       type: object
@@ -1871,7 +1889,7 @@ components:
           - entity_name: iam-ServiceId-38288dac-1f80-46dd-b135-f56153296bfa
             producer_byte_rate: 2048
             consumer_byte_rate: 1024
-    
+
     entity_quota_detail:
       type: object
       required:
@@ -1904,7 +1922,7 @@ components:
           type: integer
           description: >
             The port that the broker is listening on and which is configured in the 'advertised.listeners' broker
-            config property.  
+            config property.
         rack:
           type: string
           description: >
@@ -1926,12 +1944,12 @@ components:
           type: integer
           description: >
             The port that the broker is listening on and which is configured in the 'advertised.listeners' broker
-            config property.  
+            config property.
         rack:
           type: string
           description: >
             The rack of the broker used in rack aware replication assignment for fault tolerance. It is configure
-            in the 'broker.rack' broker config property. 
+            in the 'broker.rack' broker config property.
         configs:
           type: array
           items:
@@ -1939,14 +1957,14 @@ components:
             properties:
               name:
                 type: string
-                description: The name of the config property.      
+                description: The name of the config property.
               value:
                 type: string
                 description: The value for a config property.
               is_sensitive:
                 type: boolean
                 description: When true, the value cannot be displayed and will be returned with a null value.
-    
+
     cluster:
       type: object
       properties:
@@ -1960,12 +1978,12 @@ components:
           description: List of brokers in the cluster.
           items:
             $ref: '#/components/schemas/broker_summary'
-    
+
     group_list:
       type: array
       items:
         type: string
-    
+
     group_detail:
       type: object
       properties:
@@ -2011,7 +2029,7 @@ components:
               partition:
                 type: integer
                 description: The ID of the partition.
-    
+
     topic_partition_offset:
       type: object
       description: The offsets of a topic partition.
@@ -2030,26 +2048,26 @@ components:
           type: integer
           format: int64
           description: End offset of the partition.
-    
+
     group_reset_request:
       type: object
       properties:
         topic:
           type: string
           description: >
-            The name of the topic to be reset. 
+            The name of the topic to be reset.
             If missing or blank, the operation applies to all topics read by the consumer group.
         mode:
           type: string
           description: >
-            Mode of shift operation. 
+            Mode of shift operation.
             Valid values are 'earliest', 'latest', 'datetime'.
         value:
           type: string
           description: >
             Value for resetting offsets, based on 'mode=datetime', omit for 'earliest' and 'latest'.
         execute:
-          type: boolean 
+          type: boolean
           description:  Whether to execute the operation of resetting the offsets.
 
     group_reset_results:
@@ -2059,7 +2077,7 @@ components:
         type: object
         description: The new offset for one partition of one topic after resetting consumer group's offset.
         properties:
-          topic: 
+          topic:
             type: string
           partition:
             type: integer
@@ -2075,7 +2093,7 @@ components:
           items:
             type: string
             description: Mirroring topic selection pattern.
-    
+
     mirroring_active_topics:
       type: object
       description: Topics that are being actively mirrored.
@@ -2085,3 +2103,17 @@ components:
           items:
             type: string
             description: Active mirroring topic.
+
+    instance_status:
+      type: object
+      description: Information about the status of the instance
+      properties:
+        status:
+          type: string
+          enum: [available, degraded, offline, unknown]
+          description: >
+            The status of the instance:
+            * `available` - the instance is functioning as expected
+            * `degraded` - the instance is in a degraded state, some operations may not complete successfully
+            * `offline` - the instance is offline, all operations attempted against the instance will fail
+            * `unknown` - the state of the instance is not known at this time
