@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# (C) Copyright IBM Corp. 2023.
+# (C) Copyright IBM Corp. 2024.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
+# IBM OpenAPI SDK Code Generator Version: 3.93.0-c40121e6-20240729-182103
 
 """
 The administration REST API for IBM Event Streams on Cloud.
 
-API Version: 1.3.0
+API Version: 1.3.1
 """
 
-from typing import Dict, List
+from enum import Enum
+from typing import Dict, List, Optional
 import json
 
 from ibm_cloud_sdk_core import BaseService, DetailedResponse
@@ -79,10 +80,10 @@ class AdminrestV1(BaseService):
     def create_topic(
         self,
         *,
-        name: str = None,
-        partitions: int = None,
-        partition_count: int = None,
-        configs: List['TopicCreateRequestConfigsItem'] = None,
+        name: Optional[str] = None,
+        partitions: Optional[int] = None,
+        partition_count: Optional[int] = None,
+        configs: Optional[List['TopicCreateRequestConfigsItem']] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -177,9 +178,9 @@ class AdminrestV1(BaseService):
     def list_topics(
         self,
         *,
-        topic_filter: str = None,
-        per_page: int = None,
-        page: int = None,
+        topic_filter: Optional[str] = None,
+        per_page: Optional[int] = None,
+        page: Optional[int] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -325,8 +326,8 @@ class AdminrestV1(BaseService):
         self,
         topic_name: str,
         *,
-        new_total_partition_count: int = None,
-        configs: List['TopicUpdateRequestConfigsItem'] = None,
+        new_total_partition_count: Optional[int] = None,
+        configs: Optional[List['TopicUpdateRequestConfigsItem']] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -389,7 +390,7 @@ class AdminrestV1(BaseService):
         self,
         topic_name: str,
         *,
-        records_to_delete: List['RecordDeleteRequestRecordsToDeleteItem'] = None,
+        records_to_delete: Optional[List['RecordDeleteRequestRecordsToDeleteItem']] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -446,8 +447,8 @@ class AdminrestV1(BaseService):
         self,
         entity_name: str,
         *,
-        producer_byte_rate: int = None,
-        consumer_byte_rate: int = None,
+        producer_byte_rate: Optional[int] = None,
+        consumer_byte_rate: Optional[int] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -506,8 +507,8 @@ class AdminrestV1(BaseService):
         self,
         entity_name: str,
         *,
-        producer_byte_rate: int = None,
-        consumer_byte_rate: int = None,
+        producer_byte_rate: Optional[int] = None,
+        consumer_byte_rate: Optional[int] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -773,8 +774,8 @@ class AdminrestV1(BaseService):
         self,
         broker_id: int,
         *,
-        config_filter: str = None,
-        verbose: bool = None,
+        config_filter: Optional[str] = None,
+        verbose: Optional[bool] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -871,9 +872,9 @@ class AdminrestV1(BaseService):
     def list_consumer_groups(
         self,
         *,
-        group_filter: str = None,
-        per_page: int = None,
-        page: int = None,
+        group_filter: Optional[str] = None,
+        per_page: Optional[int] = None,
+        page: Optional[int] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -1018,10 +1019,10 @@ class AdminrestV1(BaseService):
         self,
         group_id: str,
         *,
-        topic: str = None,
-        mode: str = None,
-        value: str = None,
-        execute: bool = None,
+        topic: Optional[str] = None,
+        mode: Optional[str] = None,
+        value: Optional[str] = None,
+        execute: Optional[bool] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -1031,9 +1032,9 @@ class AdminrestV1(BaseService):
         datetime,etc.
 
         :param str group_id: The group ID for the consumer group to be updated.
-        :param str topic: (optional) The name of the topic to be reset.  If missing
+        :param str topic: (optional) The name of the topic to be reset. If missing
                or blank, the operation applies to all topics read by the consumer group.
-        :param str mode: (optional) Mode of shift operation.  Valid values are
+        :param str mode: (optional) Mode of shift operation. Valid values are
                'earliest', 'latest', 'datetime'.
         :param str value: (optional) Value for resetting offsets, based on
                'mode=datetime', omit for 'earliest' and 'latest'.
@@ -1123,7 +1124,7 @@ class AdminrestV1(BaseService):
     def replace_mirroring_topic_selection(
         self,
         *,
-        includes: List[str] = None,
+        includes: Optional[List[str]] = None,
         **kwargs,
     ) -> DetailedResponse:
         """
@@ -1206,6 +1207,43 @@ class AdminrestV1(BaseService):
         response = self.send(request, **kwargs)
         return response
 
+    def get_status(
+        self,
+        **kwargs,
+    ) -> DetailedResponse:
+        """
+        Get the status of the instance.
+
+        Get the status of the instance.
+
+        :param dict headers: A `dict` containing the request headers
+        :return: A `DetailedResponse` containing the result, headers and HTTP status code.
+        :rtype: DetailedResponse with `dict` result representing a `InstanceStatus` object
+        """
+
+        headers = {}
+        sdk_headers = get_sdk_headers(
+            service_name=self.DEFAULT_SERVICE_NAME,
+            service_version='V1',
+            operation_id='get_status',
+        )
+        headers.update(sdk_headers)
+
+        if 'headers' in kwargs:
+            headers.update(kwargs.get('headers'))
+            del kwargs['headers']
+        headers['Accept'] = 'application/json'
+
+        url = '/admin/status'
+        request = self.prepare_request(
+            method='GET',
+            url=url,
+            headers=headers,
+        )
+
+        response = self.send(request, **kwargs)
+        return response
+
 
 ##############################################################################
 # Models
@@ -1216,18 +1254,18 @@ class BrokerDetailConfigsItem:
     """
     BrokerDetailConfigsItem.
 
-    :attr str name: (optional) The name of the config property.
-    :attr str value: (optional) The value for a config property.
-    :attr bool is_sensitive: (optional) When true, the value cannot be displayed and
-          will be returned with a null value.
+    :param str name: (optional) The name of the config property.
+    :param str value: (optional) The value for a config property.
+    :param bool is_sensitive: (optional) When true, the value cannot be displayed
+          and will be returned with a null value.
     """
 
     def __init__(
         self,
         *,
-        name: str = None,
-        value: str = None,
-        is_sensitive: bool = None,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+        is_sensitive: Optional[bool] = None,
     ) -> None:
         """
         Initialize a BrokerDetailConfigsItem object.
@@ -1245,12 +1283,12 @@ class BrokerDetailConfigsItem:
     def from_dict(cls, _dict: Dict) -> 'BrokerDetailConfigsItem':
         """Initialize a BrokerDetailConfigsItem object from a json dictionary."""
         args = {}
-        if 'name' in _dict:
-            args['name'] = _dict.get('name')
-        if 'value' in _dict:
-            args['value'] = _dict.get('value')
-        if 'is_sensitive' in _dict:
-            args['is_sensitive'] = _dict.get('is_sensitive')
+        if (name := _dict.get('name')) is not None:
+            args['name'] = name
+        if (value := _dict.get('value')) is not None:
+            args['value'] = value
+        if (is_sensitive := _dict.get('is_sensitive')) is not None:
+            args['is_sensitive'] = is_sensitive
         return cls(**args)
 
     @classmethod
@@ -1292,17 +1330,17 @@ class GroupResetResultsItem:
     """
     The new offset for one partition of one topic after resetting consumer group's offset.
 
-    :attr str topic: (optional)
-    :attr int partition: (optional)
-    :attr int offset: (optional)
+    :param str topic: (optional)
+    :param int partition: (optional)
+    :param int offset: (optional)
     """
 
     def __init__(
         self,
         *,
-        topic: str = None,
-        partition: int = None,
-        offset: int = None,
+        topic: Optional[str] = None,
+        partition: Optional[int] = None,
+        offset: Optional[int] = None,
     ) -> None:
         """
         Initialize a GroupResetResultsItem object.
@@ -1319,12 +1357,12 @@ class GroupResetResultsItem:
     def from_dict(cls, _dict: Dict) -> 'GroupResetResultsItem':
         """Initialize a GroupResetResultsItem object from a json dictionary."""
         args = {}
-        if 'topic' in _dict:
-            args['topic'] = _dict.get('topic')
-        if 'partition' in _dict:
-            args['partition'] = _dict.get('partition')
-        if 'offset' in _dict:
-            args['offset'] = _dict.get('offset')
+        if (topic := _dict.get('topic')) is not None:
+            args['topic'] = topic
+        if (partition := _dict.get('partition')) is not None:
+            args['partition'] = partition
+        if (offset := _dict.get('offset')) is not None:
+            args['offset'] = offset
         return cls(**args)
 
     @classmethod
@@ -1366,15 +1404,15 @@ class MemberAssignmentsItem:
     """
     The topic partitions assigned for the consumer group member.
 
-    :attr str topic: (optional) The name of the topic.
-    :attr int partition: (optional) The ID of the partition.
+    :param str topic: (optional) The name of the topic.
+    :param int partition: (optional) The ID of the partition.
     """
 
     def __init__(
         self,
         *,
-        topic: str = None,
-        partition: int = None,
+        topic: Optional[str] = None,
+        partition: Optional[int] = None,
     ) -> None:
         """
         Initialize a MemberAssignmentsItem object.
@@ -1389,10 +1427,10 @@ class MemberAssignmentsItem:
     def from_dict(cls, _dict: Dict) -> 'MemberAssignmentsItem':
         """Initialize a MemberAssignmentsItem object from a json dictionary."""
         args = {}
-        if 'topic' in _dict:
-            args['topic'] = _dict.get('topic')
-        if 'partition' in _dict:
-            args['partition'] = _dict.get('partition')
+        if (topic := _dict.get('topic')) is not None:
+            args['topic'] = topic
+        if (partition := _dict.get('partition')) is not None:
+            args['partition'] = partition
         return cls(**args)
 
     @classmethod
@@ -1432,16 +1470,16 @@ class RecordDeleteRequestRecordsToDeleteItem:
     """
     RecordDeleteRequestRecordsToDeleteItem.
 
-    :attr int partition: (optional) The number of partitions.
-    :attr int before_offset: (optional) The offset number before which records to be
-          deleted.
+    :param int partition: (optional) The number of partitions.
+    :param int before_offset: (optional) The offset number before which records to
+          be deleted.
     """
 
     def __init__(
         self,
         *,
-        partition: int = None,
-        before_offset: int = None,
+        partition: Optional[int] = None,
+        before_offset: Optional[int] = None,
     ) -> None:
         """
         Initialize a RecordDeleteRequestRecordsToDeleteItem object.
@@ -1457,10 +1495,10 @@ class RecordDeleteRequestRecordsToDeleteItem:
     def from_dict(cls, _dict: Dict) -> 'RecordDeleteRequestRecordsToDeleteItem':
         """Initialize a RecordDeleteRequestRecordsToDeleteItem object from a json dictionary."""
         args = {}
-        if 'partition' in _dict:
-            args['partition'] = _dict.get('partition')
-        if 'before_offset' in _dict:
-            args['before_offset'] = _dict.get('before_offset')
+        if (partition := _dict.get('partition')) is not None:
+            args['partition'] = partition
+        if (before_offset := _dict.get('before_offset')) is not None:
+            args['before_offset'] = before_offset
         return cls(**args)
 
     @classmethod
@@ -1500,15 +1538,15 @@ class TopicCreateRequestConfigsItem:
     """
     TopicCreateRequestConfigsItem.
 
-    :attr str name: (optional) The name of the config property.
-    :attr str value: (optional) The value for a config property.
+    :param str name: (optional) The name of the config property.
+    :param str value: (optional) The value for a config property.
     """
 
     def __init__(
         self,
         *,
-        name: str = None,
-        value: str = None,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
     ) -> None:
         """
         Initialize a TopicCreateRequestConfigsItem object.
@@ -1523,10 +1561,10 @@ class TopicCreateRequestConfigsItem:
     def from_dict(cls, _dict: Dict) -> 'TopicCreateRequestConfigsItem':
         """Initialize a TopicCreateRequestConfigsItem object from a json dictionary."""
         args = {}
-        if 'name' in _dict:
-            args['name'] = _dict.get('name')
-        if 'value' in _dict:
-            args['value'] = _dict.get('value')
+        if (name := _dict.get('name')) is not None:
+            args['name'] = name
+        if (value := _dict.get('value')) is not None:
+            args['value'] = value
         return cls(**args)
 
     @classmethod
@@ -1566,15 +1604,15 @@ class TopicDetailReplicaAssignmentsItem:
     """
     TopicDetailReplicaAssignmentsItem.
 
-    :attr int id: (optional) The ID of the partition.
-    :attr TopicDetailReplicaAssignmentsItemBrokers brokers: (optional)
+    :param int id: (optional) The ID of the partition.
+    :param TopicDetailReplicaAssignmentsItemBrokers brokers: (optional)
     """
 
     def __init__(
         self,
         *,
-        id: int = None,
-        brokers: 'TopicDetailReplicaAssignmentsItemBrokers' = None,
+        id: Optional[int] = None,
+        brokers: Optional['TopicDetailReplicaAssignmentsItemBrokers'] = None,
     ) -> None:
         """
         Initialize a TopicDetailReplicaAssignmentsItem object.
@@ -1589,10 +1627,10 @@ class TopicDetailReplicaAssignmentsItem:
     def from_dict(cls, _dict: Dict) -> 'TopicDetailReplicaAssignmentsItem':
         """Initialize a TopicDetailReplicaAssignmentsItem object from a json dictionary."""
         args = {}
-        if 'id' in _dict:
-            args['id'] = _dict.get('id')
-        if 'brokers' in _dict:
-            args['brokers'] = TopicDetailReplicaAssignmentsItemBrokers.from_dict(_dict.get('brokers'))
+        if (id := _dict.get('id')) is not None:
+            args['id'] = id
+        if (brokers := _dict.get('brokers')) is not None:
+            args['brokers'] = TopicDetailReplicaAssignmentsItemBrokers.from_dict(brokers)
         return cls(**args)
 
     @classmethod
@@ -1635,13 +1673,13 @@ class TopicDetailReplicaAssignmentsItemBrokers:
     """
     TopicDetailReplicaAssignmentsItemBrokers.
 
-    :attr List[int] replicas: (optional)
+    :param List[int] replicas: (optional)
     """
 
     def __init__(
         self,
         *,
-        replicas: List[int] = None,
+        replicas: Optional[List[int]] = None,
     ) -> None:
         """
         Initialize a TopicDetailReplicaAssignmentsItemBrokers object.
@@ -1654,8 +1692,8 @@ class TopicDetailReplicaAssignmentsItemBrokers:
     def from_dict(cls, _dict: Dict) -> 'TopicDetailReplicaAssignmentsItemBrokers':
         """Initialize a TopicDetailReplicaAssignmentsItemBrokers object from a json dictionary."""
         args = {}
-        if 'replicas' in _dict:
-            args['replicas'] = _dict.get('replicas')
+        if (replicas := _dict.get('replicas')) is not None:
+            args['replicas'] = replicas
         return cls(**args)
 
     @classmethod
@@ -1693,18 +1731,18 @@ class TopicUpdateRequestConfigsItem:
     """
     TopicUpdateRequestConfigsItem.
 
-    :attr str name: (optional) The name of the config property.
-    :attr str value: (optional) The value of a config property.
-    :attr bool reset_to_default: (optional) When true, the value of the config
+    :param str name: (optional) The name of the config property.
+    :param str value: (optional) The value of a config property.
+    :param bool reset_to_default: (optional) When true, the value of the config
           property is reset to its default value.
     """
 
     def __init__(
         self,
         *,
-        name: str = None,
-        value: str = None,
-        reset_to_default: bool = None,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+        reset_to_default: Optional[bool] = None,
     ) -> None:
         """
         Initialize a TopicUpdateRequestConfigsItem object.
@@ -1722,12 +1760,12 @@ class TopicUpdateRequestConfigsItem:
     def from_dict(cls, _dict: Dict) -> 'TopicUpdateRequestConfigsItem':
         """Initialize a TopicUpdateRequestConfigsItem object from a json dictionary."""
         args = {}
-        if 'name' in _dict:
-            args['name'] = _dict.get('name')
-        if 'value' in _dict:
-            args['value'] = _dict.get('value')
-        if 'reset_to_default' in _dict:
-            args['reset_to_default'] = _dict.get('reset_to_default')
+        if (name := _dict.get('name')) is not None:
+            args['name'] = name
+        if (value := _dict.get('value')) is not None:
+            args['value'] = value
+        if (reset_to_default := _dict.get('reset_to_default')) is not None:
+            args['reset_to_default'] = reset_to_default
         return cls(**args)
 
     @classmethod
@@ -1769,26 +1807,26 @@ class BrokerDetail:
     """
     BrokerDetail.
 
-    :attr int id: (optional) The ID of the broker configured in the 'broker.id'
+    :param int id: (optional) The ID of the broker configured in the 'broker.id'
           broker config property.
-    :attr str host: (optional) The hostname that the broker is listening on and
+    :param str host: (optional) The hostname that the broker is listening on and
           which is configured in the 'advertised.listeners' broker config property.
-    :attr int port: (optional) The port that the broker is listening on and which is
-          configured in the 'advertised.listeners' broker config property.
-    :attr str rack: (optional) The rack of the broker used in rack aware replication
-          assignment for fault tolerance. It is configure in the 'broker.rack' broker
-          config property.
-    :attr List[BrokerDetailConfigsItem] configs: (optional)
+    :param int port: (optional) The port that the broker is listening on and which
+          is configured in the 'advertised.listeners' broker config property.
+    :param str rack: (optional) The rack of the broker used in rack aware
+          replication assignment for fault tolerance. It is configure in the 'broker.rack'
+          broker config property.
+    :param List[BrokerDetailConfigsItem] configs: (optional)
     """
 
     def __init__(
         self,
         *,
-        id: int = None,
-        host: str = None,
-        port: int = None,
-        rack: str = None,
-        configs: List['BrokerDetailConfigsItem'] = None,
+        id: Optional[int] = None,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+        rack: Optional[str] = None,
+        configs: Optional[List['BrokerDetailConfigsItem']] = None,
     ) -> None:
         """
         Initialize a BrokerDetail object.
@@ -1815,16 +1853,16 @@ class BrokerDetail:
     def from_dict(cls, _dict: Dict) -> 'BrokerDetail':
         """Initialize a BrokerDetail object from a json dictionary."""
         args = {}
-        if 'id' in _dict:
-            args['id'] = _dict.get('id')
-        if 'host' in _dict:
-            args['host'] = _dict.get('host')
-        if 'port' in _dict:
-            args['port'] = _dict.get('port')
-        if 'rack' in _dict:
-            args['rack'] = _dict.get('rack')
-        if 'configs' in _dict:
-            args['configs'] = [BrokerDetailConfigsItem.from_dict(v) for v in _dict.get('configs')]
+        if (id := _dict.get('id')) is not None:
+            args['id'] = id
+        if (host := _dict.get('host')) is not None:
+            args['host'] = host
+        if (port := _dict.get('port')) is not None:
+            args['port'] = port
+        if (rack := _dict.get('rack')) is not None:
+            args['rack'] = rack
+        if (configs := _dict.get('configs')) is not None:
+            args['configs'] = [BrokerDetailConfigsItem.from_dict(v) for v in configs]
         return cls(**args)
 
     @classmethod
@@ -1876,24 +1914,24 @@ class BrokerSummary:
     """
     BrokerSummary.
 
-    :attr int id: (optional) The ID of the broker configured in the 'broker.id'
+    :param int id: (optional) The ID of the broker configured in the 'broker.id'
           broker config property.
-    :attr str host: (optional) The hostname that the broker is listening on and
+    :param str host: (optional) The hostname that the broker is listening on and
           which is configured in the 'advertised.listeners' broker config property.
-    :attr int port: (optional) The port that the broker is listening on and which is
-          configured in the 'advertised.listeners' broker config property.
-    :attr str rack: (optional) The rack of the broker used in rack aware replication
-          assignment for fault tolerance. It is configure in the 'broker.rack' broker
-          config property.
+    :param int port: (optional) The port that the broker is listening on and which
+          is configured in the 'advertised.listeners' broker config property.
+    :param str rack: (optional) The rack of the broker used in rack aware
+          replication assignment for fault tolerance. It is configure in the 'broker.rack'
+          broker config property.
     """
 
     def __init__(
         self,
         *,
-        id: int = None,
-        host: str = None,
-        port: int = None,
-        rack: str = None,
+        id: Optional[int] = None,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+        rack: Optional[str] = None,
     ) -> None:
         """
         Initialize a BrokerSummary object.
@@ -1918,14 +1956,14 @@ class BrokerSummary:
     def from_dict(cls, _dict: Dict) -> 'BrokerSummary':
         """Initialize a BrokerSummary object from a json dictionary."""
         args = {}
-        if 'id' in _dict:
-            args['id'] = _dict.get('id')
-        if 'host' in _dict:
-            args['host'] = _dict.get('host')
-        if 'port' in _dict:
-            args['port'] = _dict.get('port')
-        if 'rack' in _dict:
-            args['rack'] = _dict.get('rack')
+        if (id := _dict.get('id')) is not None:
+            args['id'] = id
+        if (host := _dict.get('host')) is not None:
+            args['host'] = host
+        if (port := _dict.get('port')) is not None:
+            args['port'] = port
+        if (rack := _dict.get('rack')) is not None:
+            args['rack'] = rack
         return cls(**args)
 
     @classmethod
@@ -1969,17 +2007,17 @@ class Cluster:
     """
     Cluster.
 
-    :attr str id: (optional) The ID of the cluster.
-    :attr BrokerSummary controller: (optional)
-    :attr List[BrokerSummary] brokers: (optional) List of brokers in the cluster.
+    :param str id: (optional) The ID of the cluster.
+    :param BrokerSummary controller: (optional)
+    :param List[BrokerSummary] brokers: (optional) List of brokers in the cluster.
     """
 
     def __init__(
         self,
         *,
-        id: str = None,
-        controller: 'BrokerSummary' = None,
-        brokers: List['BrokerSummary'] = None,
+        id: Optional[str] = None,
+        controller: Optional['BrokerSummary'] = None,
+        brokers: Optional[List['BrokerSummary']] = None,
     ) -> None:
         """
         Initialize a Cluster object.
@@ -1997,12 +2035,12 @@ class Cluster:
     def from_dict(cls, _dict: Dict) -> 'Cluster':
         """Initialize a Cluster object from a json dictionary."""
         args = {}
-        if 'id' in _dict:
-            args['id'] = _dict.get('id')
-        if 'controller' in _dict:
-            args['controller'] = BrokerSummary.from_dict(_dict.get('controller'))
-        if 'brokers' in _dict:
-            args['brokers'] = [BrokerSummary.from_dict(v) for v in _dict.get('brokers')]
+        if (id := _dict.get('id')) is not None:
+            args['id'] = id
+        if (controller := _dict.get('controller')) is not None:
+            args['controller'] = BrokerSummary.from_dict(controller)
+        if (brokers := _dict.get('brokers')) is not None:
+            args['brokers'] = [BrokerSummary.from_dict(v) for v in brokers]
         return cls(**args)
 
     @classmethod
@@ -2053,17 +2091,17 @@ class EntityQuotaDetail:
     """
     EntityQuotaDetail.
 
-    :attr str entity_name: The name of the entity.
-    :attr int producer_byte_rate: (optional) The producer byte rate quota value.
-    :attr int consumer_byte_rate: (optional) The consumer byte rate quota value.
+    :param str entity_name: The name of the entity.
+    :param int producer_byte_rate: (optional) The producer byte rate quota value.
+    :param int consumer_byte_rate: (optional) The consumer byte rate quota value.
     """
 
     def __init__(
         self,
         entity_name: str,
         *,
-        producer_byte_rate: int = None,
-        consumer_byte_rate: int = None,
+        producer_byte_rate: Optional[int] = None,
+        consumer_byte_rate: Optional[int] = None,
     ) -> None:
         """
         Initialize a EntityQuotaDetail object.
@@ -2082,14 +2120,14 @@ class EntityQuotaDetail:
     def from_dict(cls, _dict: Dict) -> 'EntityQuotaDetail':
         """Initialize a EntityQuotaDetail object from a json dictionary."""
         args = {}
-        if 'entity_name' in _dict:
-            args['entity_name'] = _dict.get('entity_name')
+        if (entity_name := _dict.get('entity_name')) is not None:
+            args['entity_name'] = entity_name
         else:
             raise ValueError('Required property \'entity_name\' not present in EntityQuotaDetail JSON')
-        if 'producer_byte_rate' in _dict:
-            args['producer_byte_rate'] = _dict.get('producer_byte_rate')
-        if 'consumer_byte_rate' in _dict:
-            args['consumer_byte_rate'] = _dict.get('consumer_byte_rate')
+        if (producer_byte_rate := _dict.get('producer_byte_rate')) is not None:
+            args['producer_byte_rate'] = producer_byte_rate
+        if (consumer_byte_rate := _dict.get('consumer_byte_rate')) is not None:
+            args['consumer_byte_rate'] = consumer_byte_rate
         return cls(**args)
 
     @classmethod
@@ -2131,20 +2169,20 @@ class GroupDetail:
     """
     GroupDetail.
 
-    :attr str group_id: (optional) The ID of the consumer group.
-    :attr str state: (optional) THe state of the consumer group.
-    :attr List[Member] members: (optional) Members in the consumer group.
-    :attr List[TopicPartitionOffset] offsets: (optional) The offsets of the consumer
-          group.
+    :param str group_id: (optional) The ID of the consumer group.
+    :param str state: (optional) THe state of the consumer group.
+    :param List[Member] members: (optional) Members in the consumer group.
+    :param List[TopicPartitionOffset] offsets: (optional) The offsets of the
+          consumer group.
     """
 
     def __init__(
         self,
         *,
-        group_id: str = None,
-        state: str = None,
-        members: List['Member'] = None,
-        offsets: List['TopicPartitionOffset'] = None,
+        group_id: Optional[str] = None,
+        state: Optional[str] = None,
+        members: Optional[List['Member']] = None,
+        offsets: Optional[List['TopicPartitionOffset']] = None,
     ) -> None:
         """
         Initialize a GroupDetail object.
@@ -2164,14 +2202,14 @@ class GroupDetail:
     def from_dict(cls, _dict: Dict) -> 'GroupDetail':
         """Initialize a GroupDetail object from a json dictionary."""
         args = {}
-        if 'group_id' in _dict:
-            args['group_id'] = _dict.get('group_id')
-        if 'state' in _dict:
-            args['state'] = _dict.get('state')
-        if 'members' in _dict:
-            args['members'] = [Member.from_dict(v) for v in _dict.get('members')]
-        if 'offsets' in _dict:
-            args['offsets'] = [TopicPartitionOffset.from_dict(v) for v in _dict.get('offsets')]
+        if (group_id := _dict.get('group_id')) is not None:
+            args['group_id'] = group_id
+        if (state := _dict.get('state')) is not None:
+            args['state'] = state
+        if (members := _dict.get('members')) is not None:
+            args['members'] = [Member.from_dict(v) for v in members]
+        if (offsets := _dict.get('offsets')) is not None:
+            args['offsets'] = [TopicPartitionOffset.from_dict(v) for v in offsets]
         return cls(**args)
 
     @classmethod
@@ -2223,25 +2261,106 @@ class GroupDetail:
         return not self == other
 
 
-class Member:
+class InstanceStatus:
     """
-    Member.
+    Information about the status of the instance.
 
-    :attr str consumer_id: (optional) The consumer ID of the consumer group member.
-    :attr str client_id: (optional) The client ID of the consumer group member.
-    :attr str host: (optional) The hostname of the machine where the consumer group
-          member is running.
-    :attr List[MemberAssignmentsItem] assignments: (optional) The assignments of the
-          group member.
+    :param str status: (optional) The status of the instance: * `available` - the
+          instance is functioning as expected * `degraded` - the instance is in a degraded
+          state, some operations may not complete successfully * `offline` - the instance
+          is offline, all operations attempted against the instance will fail * `unknown`
+          - the state of the instance is not known at this time.
     """
 
     def __init__(
         self,
         *,
-        consumer_id: str = None,
-        client_id: str = None,
-        host: str = None,
-        assignments: List['MemberAssignmentsItem'] = None,
+        status: Optional[str] = None,
+    ) -> None:
+        """
+        Initialize a InstanceStatus object.
+
+        :param str status: (optional) The status of the instance: * `available` -
+               the instance is functioning as expected * `degraded` - the instance is in a
+               degraded state, some operations may not complete successfully * `offline` -
+               the instance is offline, all operations attempted against the instance will
+               fail * `unknown` - the state of the instance is not known at this time.
+        """
+        self.status = status
+
+    @classmethod
+    def from_dict(cls, _dict: Dict) -> 'InstanceStatus':
+        """Initialize a InstanceStatus object from a json dictionary."""
+        args = {}
+        if (status := _dict.get('status')) is not None:
+            args['status'] = status
+        return cls(**args)
+
+    @classmethod
+    def _from_dict(cls, _dict):
+        """Initialize a InstanceStatus object from a json dictionary."""
+        return cls.from_dict(_dict)
+
+    def to_dict(self) -> Dict:
+        """Return a json dictionary representing this model."""
+        _dict = {}
+        if hasattr(self, 'status') and self.status is not None:
+            _dict['status'] = self.status
+        return _dict
+
+    def _to_dict(self):
+        """Return a json dictionary representing this model."""
+        return self.to_dict()
+
+    def __str__(self) -> str:
+        """Return a `str` version of this InstanceStatus object."""
+        return json.dumps(self.to_dict(), indent=2)
+
+    def __eq__(self, other: 'InstanceStatus') -> bool:
+        """Return `true` when self and other are equal, false otherwise."""
+        if not isinstance(other, self.__class__):
+            return False
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other: 'InstanceStatus') -> bool:
+        """Return `true` when self and other are not equal, false otherwise."""
+        return not self == other
+
+    class StatusEnum(str, Enum):
+        """
+        The status of the instance: * `available` - the instance is functioning as
+        expected * `degraded` - the instance is in a degraded state, some operations may
+        not complete successfully * `offline` - the instance is offline, all operations
+        attempted against the instance will fail * `unknown` - the state of the instance
+        is not known at this time.
+        """
+
+        AVAILABLE = 'available'
+        DEGRADED = 'degraded'
+        OFFLINE = 'offline'
+        UNKNOWN = 'unknown'
+
+
+
+class Member:
+    """
+    Member.
+
+    :param str consumer_id: (optional) The consumer ID of the consumer group member.
+    :param str client_id: (optional) The client ID of the consumer group member.
+    :param str host: (optional) The hostname of the machine where the consumer group
+          member is running.
+    :param List[MemberAssignmentsItem] assignments: (optional) The assignments of
+          the group member.
+    """
+
+    def __init__(
+        self,
+        *,
+        consumer_id: Optional[str] = None,
+        client_id: Optional[str] = None,
+        host: Optional[str] = None,
+        assignments: Optional[List['MemberAssignmentsItem']] = None,
     ) -> None:
         """
         Initialize a Member object.
@@ -2264,14 +2383,14 @@ class Member:
     def from_dict(cls, _dict: Dict) -> 'Member':
         """Initialize a Member object from a json dictionary."""
         args = {}
-        if 'consumer_id' in _dict:
-            args['consumer_id'] = _dict.get('consumer_id')
-        if 'client_id' in _dict:
-            args['client_id'] = _dict.get('client_id')
-        if 'host' in _dict:
-            args['host'] = _dict.get('host')
-        if 'assignments' in _dict:
-            args['assignments'] = [MemberAssignmentsItem.from_dict(v) for v in _dict.get('assignments')]
+        if (consumer_id := _dict.get('consumer_id')) is not None:
+            args['consumer_id'] = consumer_id
+        if (client_id := _dict.get('client_id')) is not None:
+            args['client_id'] = client_id
+        if (host := _dict.get('host')) is not None:
+            args['host'] = host
+        if (assignments := _dict.get('assignments')) is not None:
+            args['assignments'] = [MemberAssignmentsItem.from_dict(v) for v in assignments]
         return cls(**args)
 
     @classmethod
@@ -2321,13 +2440,13 @@ class MirroringActiveTopics:
     """
     Topics that are being actively mirrored.
 
-    :attr List[str] active_topics: (optional)
+    :param List[str] active_topics: (optional)
     """
 
     def __init__(
         self,
         *,
-        active_topics: List[str] = None,
+        active_topics: Optional[List[str]] = None,
     ) -> None:
         """
         Initialize a MirroringActiveTopics object.
@@ -2340,8 +2459,8 @@ class MirroringActiveTopics:
     def from_dict(cls, _dict: Dict) -> 'MirroringActiveTopics':
         """Initialize a MirroringActiveTopics object from a json dictionary."""
         args = {}
-        if 'active_topics' in _dict:
-            args['active_topics'] = _dict.get('active_topics')
+        if (active_topics := _dict.get('active_topics')) is not None:
+            args['active_topics'] = active_topics
         return cls(**args)
 
     @classmethod
@@ -2379,13 +2498,13 @@ class MirroringTopicSelection:
     """
     Mirroring topic selection payload.
 
-    :attr List[str] includes: (optional)
+    :param List[str] includes: (optional)
     """
 
     def __init__(
         self,
         *,
-        includes: List[str] = None,
+        includes: Optional[List[str]] = None,
     ) -> None:
         """
         Initialize a MirroringTopicSelection object.
@@ -2398,8 +2517,8 @@ class MirroringTopicSelection:
     def from_dict(cls, _dict: Dict) -> 'MirroringTopicSelection':
         """Initialize a MirroringTopicSelection object from a json dictionary."""
         args = {}
-        if 'includes' in _dict:
-            args['includes'] = _dict.get('includes')
+        if (includes := _dict.get('includes')) is not None:
+            args['includes'] = includes
         return cls(**args)
 
     @classmethod
@@ -2437,15 +2556,15 @@ class QuotaDetail:
     """
     QuotaDetail.
 
-    :attr int producer_byte_rate: (optional) The producer byte rate quota value.
-    :attr int consumer_byte_rate: (optional) The consumer byte rate quota value.
+    :param int producer_byte_rate: (optional) The producer byte rate quota value.
+    :param int consumer_byte_rate: (optional) The consumer byte rate quota value.
     """
 
     def __init__(
         self,
         *,
-        producer_byte_rate: int = None,
-        consumer_byte_rate: int = None,
+        producer_byte_rate: Optional[int] = None,
+        consumer_byte_rate: Optional[int] = None,
     ) -> None:
         """
         Initialize a QuotaDetail object.
@@ -2462,10 +2581,10 @@ class QuotaDetail:
     def from_dict(cls, _dict: Dict) -> 'QuotaDetail':
         """Initialize a QuotaDetail object from a json dictionary."""
         args = {}
-        if 'producer_byte_rate' in _dict:
-            args['producer_byte_rate'] = _dict.get('producer_byte_rate')
-        if 'consumer_byte_rate' in _dict:
-            args['consumer_byte_rate'] = _dict.get('consumer_byte_rate')
+        if (producer_byte_rate := _dict.get('producer_byte_rate')) is not None:
+            args['producer_byte_rate'] = producer_byte_rate
+        if (consumer_byte_rate := _dict.get('consumer_byte_rate')) is not None:
+            args['consumer_byte_rate'] = consumer_byte_rate
         return cls(**args)
 
     @classmethod
@@ -2505,13 +2624,13 @@ class QuotaList:
     """
     A list of 'quota_detail' is returned.
 
-    :attr List[EntityQuotaDetail] data: (optional)
+    :param List[EntityQuotaDetail] data: (optional)
     """
 
     def __init__(
         self,
         *,
-        data: List['EntityQuotaDetail'] = None,
+        data: Optional[List['EntityQuotaDetail']] = None,
     ) -> None:
         """
         Initialize a QuotaList object.
@@ -2524,8 +2643,8 @@ class QuotaList:
     def from_dict(cls, _dict: Dict) -> 'QuotaList':
         """Initialize a QuotaList object from a json dictionary."""
         args = {}
-        if 'data' in _dict:
-            args['data'] = [EntityQuotaDetail.from_dict(v) for v in _dict.get('data')]
+        if (data := _dict.get('data')) is not None:
+            args['data'] = [EntityQuotaDetail.from_dict(v) for v in data]
         return cls(**args)
 
     @classmethod
@@ -2569,22 +2688,22 @@ class TopicConfigs:
     """
     TopicConfigs.
 
-    :attr str retention_bytes: (optional) The value of config property
+    :param str retention_bytes: (optional) The value of config property
           'retention.bytes'.
-    :attr str segment_bytes: (optional) The value of config property
+    :param str segment_bytes: (optional) The value of config property
           'segment.bytes'.
-    :attr str segment_index_bytes: (optional) The value of config property
+    :param str segment_index_bytes: (optional) The value of config property
           'segment.index.bytes'.
-    :attr str segment_ms: (optional) The value of config property 'segment.ms'.
+    :param str segment_ms: (optional) The value of config property 'segment.ms'.
     """
 
     def __init__(
         self,
         *,
-        retention_bytes: str = None,
-        segment_bytes: str = None,
-        segment_index_bytes: str = None,
-        segment_ms: str = None,
+        retention_bytes: Optional[str] = None,
+        segment_bytes: Optional[str] = None,
+        segment_index_bytes: Optional[str] = None,
+        segment_ms: Optional[str] = None,
     ) -> None:
         """
         Initialize a TopicConfigs object.
@@ -2607,14 +2726,14 @@ class TopicConfigs:
     def from_dict(cls, _dict: Dict) -> 'TopicConfigs':
         """Initialize a TopicConfigs object from a json dictionary."""
         args = {}
-        if 'retention.bytes' in _dict:
-            args['retention_bytes'] = _dict.get('retention.bytes')
-        if 'segment.bytes' in _dict:
-            args['segment_bytes'] = _dict.get('segment.bytes')
-        if 'segment.index.bytes' in _dict:
-            args['segment_index_bytes'] = _dict.get('segment.index.bytes')
-        if 'segment.ms' in _dict:
-            args['segment_ms'] = _dict.get('segment.ms')
+        if (retention_bytes := _dict.get('retention.bytes')) is not None:
+            args['retention_bytes'] = retention_bytes
+        if (segment_bytes := _dict.get('segment.bytes')) is not None:
+            args['segment_bytes'] = segment_bytes
+        if (segment_index_bytes := _dict.get('segment.index.bytes')) is not None:
+            args['segment_index_bytes'] = segment_index_bytes
+        if (segment_ms := _dict.get('segment.ms')) is not None:
+            args['segment_ms'] = segment_ms
         return cls(**args)
 
     @classmethod
@@ -2658,27 +2777,27 @@ class TopicDetail:
     """
     TopicDetail.
 
-    :attr str name: (optional) The name of the topic.
-    :attr int partitions: (optional) The number of partitions.
-    :attr int replication_factor: (optional) The number of replication factor.
-    :attr int retention_ms: (optional) The value of config property 'retention.ms'.
-    :attr str cleanup_policy: (optional) The value of config property
+    :param str name: (optional) The name of the topic.
+    :param int partitions: (optional) The number of partitions.
+    :param int replication_factor: (optional) The number of replication factor.
+    :param int retention_ms: (optional) The value of config property 'retention.ms'.
+    :param str cleanup_policy: (optional) The value of config property
           'cleanup.policy'.
-    :attr TopicConfigs configs: (optional)
-    :attr List[TopicDetailReplicaAssignmentsItem] replica_assignments: (optional)
+    :param TopicConfigs configs: (optional)
+    :param List[TopicDetailReplicaAssignmentsItem] replica_assignments: (optional)
           The replia assignment of the topic.
     """
 
     def __init__(
         self,
         *,
-        name: str = None,
-        partitions: int = None,
-        replication_factor: int = None,
-        retention_ms: int = None,
-        cleanup_policy: str = None,
-        configs: 'TopicConfigs' = None,
-        replica_assignments: List['TopicDetailReplicaAssignmentsItem'] = None,
+        name: Optional[str] = None,
+        partitions: Optional[int] = None,
+        replication_factor: Optional[int] = None,
+        retention_ms: Optional[int] = None,
+        cleanup_policy: Optional[str] = None,
+        configs: Optional['TopicConfigs'] = None,
+        replica_assignments: Optional[List['TopicDetailReplicaAssignmentsItem']] = None,
     ) -> None:
         """
         Initialize a TopicDetail object.
@@ -2706,20 +2825,20 @@ class TopicDetail:
     def from_dict(cls, _dict: Dict) -> 'TopicDetail':
         """Initialize a TopicDetail object from a json dictionary."""
         args = {}
-        if 'name' in _dict:
-            args['name'] = _dict.get('name')
-        if 'partitions' in _dict:
-            args['partitions'] = _dict.get('partitions')
-        if 'replicationFactor' in _dict:
-            args['replication_factor'] = _dict.get('replicationFactor')
-        if 'retentionMs' in _dict:
-            args['retention_ms'] = _dict.get('retentionMs')
-        if 'cleanupPolicy' in _dict:
-            args['cleanup_policy'] = _dict.get('cleanupPolicy')
-        if 'configs' in _dict:
-            args['configs'] = TopicConfigs.from_dict(_dict.get('configs'))
-        if 'replicaAssignments' in _dict:
-            args['replica_assignments'] = [TopicDetailReplicaAssignmentsItem.from_dict(v) for v in _dict.get('replicaAssignments')]
+        if (name := _dict.get('name')) is not None:
+            args['name'] = name
+        if (partitions := _dict.get('partitions')) is not None:
+            args['partitions'] = partitions
+        if (replication_factor := _dict.get('replicationFactor')) is not None:
+            args['replication_factor'] = replication_factor
+        if (retention_ms := _dict.get('retentionMs')) is not None:
+            args['retention_ms'] = retention_ms
+        if (cleanup_policy := _dict.get('cleanupPolicy')) is not None:
+            args['cleanup_policy'] = cleanup_policy
+        if (configs := _dict.get('configs')) is not None:
+            args['configs'] = TopicConfigs.from_dict(configs)
+        if (replica_assignments := _dict.get('replicaAssignments')) is not None:
+            args['replica_assignments'] = [TopicDetailReplicaAssignmentsItem.from_dict(v) for v in replica_assignments]
         return cls(**args)
 
     @classmethod
@@ -2778,19 +2897,19 @@ class TopicPartitionOffset:
     """
     The offsets of a topic partition.
 
-    :attr str topic: (optional) The name of the topic.
-    :attr int partition: (optional) The ID of the partition.
-    :attr int current_offset: (optional) Current offset of the partition.
-    :attr int end_offset: (optional) End offset of the partition.
+    :param str topic: (optional) The name of the topic.
+    :param int partition: (optional) The ID of the partition.
+    :param int current_offset: (optional) Current offset of the partition.
+    :param int end_offset: (optional) End offset of the partition.
     """
 
     def __init__(
         self,
         *,
-        topic: str = None,
-        partition: int = None,
-        current_offset: int = None,
-        end_offset: int = None,
+        topic: Optional[str] = None,
+        partition: Optional[int] = None,
+        current_offset: Optional[int] = None,
+        end_offset: Optional[int] = None,
     ) -> None:
         """
         Initialize a TopicPartitionOffset object.
@@ -2809,14 +2928,14 @@ class TopicPartitionOffset:
     def from_dict(cls, _dict: Dict) -> 'TopicPartitionOffset':
         """Initialize a TopicPartitionOffset object from a json dictionary."""
         args = {}
-        if 'topic' in _dict:
-            args['topic'] = _dict.get('topic')
-        if 'partition' in _dict:
-            args['partition'] = _dict.get('partition')
-        if 'current_offset' in _dict:
-            args['current_offset'] = _dict.get('current_offset')
-        if 'end_offset' in _dict:
-            args['end_offset'] = _dict.get('end_offset')
+        if (topic := _dict.get('topic')) is not None:
+            args['topic'] = topic
+        if (partition := _dict.get('partition')) is not None:
+            args['partition'] = partition
+        if (current_offset := _dict.get('current_offset')) is not None:
+            args['current_offset'] = current_offset
+        if (end_offset := _dict.get('end_offset')) is not None:
+            args['end_offset'] = end_offset
         return cls(**args)
 
     @classmethod
