@@ -1,56 +1,45 @@
 language: python
 
-dist: focal
+dist: jammy
 
-# Remove this if using external Travis
-group: focal
+stages:
+  - name: Build-Test
+    if: tag IS blank
+# Uncomment these stages when you're ready to use them.
+#  - name: Semantic-Release
+#    if: (branch = main) AND (type IN (push, api)) AND (fork = false)
+#  - name: Publish-Release
+#    if: (tag IS present) AND (fork = false)
 
-cache: pip
-
-notifications:
-  email: true
-
-matrix:
-  include:
-    - python: 3.8
-#     - python: 3.9
-#     - python: 3.10
-#     - python: 3.11
-
-install:
-  - sudo apt-get update
-  - sudo apt-get install pandoc
-  - pip install pypandoc
-  - echo -e "machine github.ibm.com\n  login $GITHUB_ACCESS_TOKEN" > ~/.netrc
-  - pip install setuptools=="60.8.2"
+# Default "install" and "script" steps.
+install: true
 
 script:
-  - make ci
+- make ci
 
-          else
-            echo "Skipping systest stage for PR build..."
-          fi
+jobs:
+  include:
+    - stage: Build-Test
+      python: '3.8'
+    - python: '3.10'
+    - python: '3.11'
+    - python: '3.12'
 
-# To enable semantic-release, uncomment these sections.
-# before_deploy:
-# - nvm install 18
-# - node --version
-# - npm --version
-# - npm install
-# - pip install bump2version
-#
-# deploy:
-# - provider: script
-#   script: npm run semantic-release
-#   skip_cleanup: true
-#   on:
-#     python: '3.8'
-#     branch: main
-# - provider: pypi
-#   user: __token__
-#   password: $PYPI_TOKEN
-#   repository: https://upload.pypi.org/legacy
-#   skip_cleanup: true
-#   on:
-#     python: '3.8'
-#     tags: true
+# Uncomment this stage to use semantic-release to automatically create new releases.
+#    - stage: Semantic-Release
+#      language: node_js
+#      node_js: 22
+#      install:
+#        - npm install
+#        - pip install --user bump-my-version
+#      script:
+#        - npm run semantic-release
+
+# Uncomment this stage to automatically publish your package to pypi.org.
+#    - stage: Publish-Release
+#      python: "3.8"
+#      name: Publish-To-PyPi
+#      script:
+#        - make ci
+#        - make publish-deps
+#        - make publish-release
