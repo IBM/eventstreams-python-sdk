@@ -38,4 +38,4 @@ lint-fix:
 	black ${LINT_DIRS}
 
 example:
-	python example.py
+	python examples/example.py
