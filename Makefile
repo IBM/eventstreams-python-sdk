@@ -2,40 +2,55 @@
 # to be ready for development work in the local sandbox.
 # example: "make setup"
 
-LINT_DIRS=eventstreams_sdk test/unit examples
+PYTHON=python3
+LINT=black
+LINT_DIRS=eventstreams_sdk test/unit test/integration examples
 
-setup: deps dev_deps install_project
+setup: deps dev-deps install-project
 
-all: upgrade_pip setup test-unit lint
+all: upgrade-pip setup test-unit lint
 
 ci: all
 
-upgrade_pip:
-	python -m pip install --upgrade pip
+publish-release: build-dist publish-dist
+
+upgrade-pip:
+	${PYTHON} -m pip install --upgrade pip
 
 deps:
-	pip install -r requirements.txt
+	${PYTHON} -m pip install .
 
-dev_deps:
-	pip install -r requirements-dev.txt
+dev-deps:
+	${PYTHON} -m pip install .[dev]
 
-install_project:
-	pip install -e .
+publish-deps:
+	${PYTHON} -m pip install .[publish]
 
-test: test-unit
+install-project:
+	${PYTHON} -m pip install .
+
+test: test-unit # test-int
 
 test-unit:
-	python -m pytest test/unit
+	${PYTHON} -m pytest test/unit
+
+# test-int:
+# 	${PYTHON} -m pytest test/integration
 
 test-examples:
-	pytest examples
+	${PYTHON} -m pytest examples
 
-lint: lint-fix
-	pylint ${LINT_DIRS} --exit-zero
-	black --check ${LINT_DIRS}
+lint:
+	${PYTHON} -m pylint ${LINT_DIRS} --exit-zero
+	${LINT} --check ${LINT_DIRS}
 
 lint-fix:
-	black ${LINT_DIRS}
+	${LINT} ${LINT_DIRS}
 
-example:
-	python examples/example.py
+build-dist:
+	rm -fr dist
+	${PYTHON} -m build
+
+# This target requires the TWINE_PASSWORD env variable to be set to the user's pypi.org API token.
+publish-dist:
+	TWINE_USERNAME=__token__ ${PYTHON} -m twine upload --non-interactive --verbose dist/*

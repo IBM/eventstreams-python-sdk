@@ -1,0 +1,63 @@
+[build-system]
+requires = [
+    "setuptools>=67.7.2",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eventstreams_sdk"
+dynamic = ["version"]
+description = "Event Streams Python SDK"
+license = {file = "LICENSE"}
+authors = [
+  {name = "IBM", email = "eventstreams@uk.ibm.com"},
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+dependencies = [
+    "ibm_cloud_sdk_core>=3.20.6,<4.0.0"
+]
+keywords = ["eventstreams_sdk","ibm", "cloud", "ibm cloud services"]
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+
+[project.urls]
+Homepage = "https://github.com/IBM/eventstreams-python-sdk"
+Documentation = "https://github.com/IBM/eventstreams-python-sdk/blob/main/README.md"
+Issues = "https://github.com/IBM/eventstreams-python-sdk/issues"
+Contributing = "https://github.com/IBM/eventstreams-python-sdk/blob/main/CONTRIBUTING.md"
+License = "https://github.com/IBM/eventstreams-python-sdk/blob/main/LICENSE"
+
+[project.optional-dependencies]
+dev = [
+    "coverage>=7.3.2,<8.0.0",
+    "pylint>=3.0.0,<4.0.0",
+    "pytest>=7.4.2,<8.0.0",
+    "pytest-cov>=4.1.0,<5.0.0",
+    "responses>=0.23.3,<1.0.0",
+    "black>=24.0.0,<25.0.0",
+]
+publish = [
+    "build",
+    "twine"
+]
+
+[tool.setuptools]
+packages = ["eventstreams_sdk"]
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
